@@ -54,7 +54,7 @@ export default function LoginForm() {
 
         <div className="mt-2">
           Har du ikke en bruger?{" "}
-          <Link to="/createuser" className="text-blue-500 font-bold">
+          <Link to="/signup" className="text-blue-500 font-bold">
             Opret en her!
           </Link>
         </div>
