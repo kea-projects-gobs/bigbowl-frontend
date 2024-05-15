@@ -1,7 +1,5 @@
 import { createContext, useContext, useState, ReactNode , useEffect} from "react";
 import { authProvider, LoginRequest, LoginResponse, User } from "./authUtils";
-import axiosWithAuth from "./axios";
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import getToken from "./authToken";
 
@@ -54,17 +52,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     // Clear the logout timer on signout
     clearTimeout(logoutTimer!);
-    try {
-      await axiosWithAuth.post("/auth/logout");
-      console.log("User logged out successfully");
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        // If the error is due to an expired token, proceed with client-side cleanup
-        console.log("Token expired, but proceeding with logout on client side.");
-      } else {
-        console.error("Failed to log out", error);
-      }
-    }
     // Proceed with client-side cleanup
     setUsername(null);
     localStorage.removeItem("token");
