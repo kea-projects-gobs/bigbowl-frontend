@@ -22,11 +22,13 @@ export default function LandingPage() {
         </div>
         <div>
           <img className="image" src={dining} alt="" />
-          <h2 className="text-2xl font-bold text-center">Spisning</h2>
+          <h2 className="text-2xl font-bold text-center">Middag</h2>
         </div>
       </div>
-      <div className="flex justify-center">
-        <Button onClick={() => navigate("/booking")}>Reservér nu</Button>
+      <div className="flex justify-center mt-4">
+        <Button className="py-6 text-3xl" onClick={() => navigate("/booking")}>
+          Reservér nu
+        </Button>
       </div>
     </div>
   );
