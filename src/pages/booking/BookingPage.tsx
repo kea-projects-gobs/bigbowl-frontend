@@ -22,6 +22,8 @@ export default function BookingPage() {
   );
   const [participants, setParticipants] = useState<number>(1);
   const [time, setTime] = useState<string>("10:00");
+  const [isError, setIsError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const maxParticipants = {
     bowling: 24,
@@ -29,9 +31,25 @@ export default function BookingPage() {
     dining: 24,
   };
 
+  const openingHours = {
+    open: "10:00",
+    close: "22:00",
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsError(false);
+
+    if (!date) {
+      setIsError(true);
+      setErrorMessage("Vælg en dato");
+      return;
+    }
+
     console.log("Form submitted");
+
+    setIsError(false);
+
     console.log({
       date: date,
       activity: activity,
@@ -118,7 +136,7 @@ export default function BookingPage() {
                   value="airhockey"
                   id="r2"
                 />
-                <Label htmlFor="r2">Airhockey</Label>
+                <Label htmlFor="r2">Air hockey</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem className="bg-white" value="dining" id="r3" />
@@ -148,12 +166,17 @@ export default function BookingPage() {
             />
           </div>
           <div className="mt-4">
-            <p className="mb-2 font-medium">Start tidspunkt</p>
+            <p className="mb-2 font-medium">
+              Start tidspunkt{" "}
+              <span className="font-light text-[14px]">
+                (åbent {openingHours["open"]} - {openingHours["close"]})
+              </span>
+            </p>
             <Input
               className="bg-white"
               type="time"
-              min="10:00"
-              max="22:00"
+              min={openingHours["open"]}
+              max={openingHours["close"]}
               step="3600"
               value={time}
               onChange={e => setTime(e.target.value)}
@@ -163,6 +186,9 @@ export default function BookingPage() {
           <Button type="submit" className="mt-4">
             Videre
           </Button>
+          <div className="mt-4 font-medium text-center text-red-600">
+            {isError && <p>{errorMessage}</p>}
+          </div>
         </div>
       </form>
     </div>
