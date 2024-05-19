@@ -1,12 +1,15 @@
-import bowling from "../../assets/bowling.png";
-import dining from "../../assets/dining.png";
-import airhockey from "../../assets/airhockey.png";
+import bowling from "@/assets/bowling.png";
+import dining from "@/assets/dining.png";
+import airhockey from "@/assets/airhockey.png";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
   return (
     <div>
       <div>
-        <h1 className="text-4xl font-bold text-center pb-5">Vi tilbyder</h1>
+        <h1 className="pb-5 text-4xl font-bold text-center">Vi tilbyder</h1>
       </div>
       <div className="grid grid-cols-3">
         <div>
@@ -21,6 +24,9 @@ export default function LandingPage() {
           <img className="image" src={dining} alt="" />
           <h2 className="text-2xl font-bold text-center">Spisning</h2>
         </div>
+      </div>
+      <div className="flex justify-center">
+        <Button onClick={() => navigate("/booking")}>Reservér nu</Button>
       </div>
     </div>
   );
