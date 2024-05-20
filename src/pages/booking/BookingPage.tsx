@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { da } from "date-fns/locale";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+// import { Label } from "@/components/ui/label";
+// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -13,14 +13,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
+import Dropdown from "@/components/ui/dropdown";
 
 export default function BookingPage() {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [activity, setActivity] = useState<"bowling" | "airhockey" | "dining">(
     "bowling"
   );
-  const [participants, setParticipants] = useState<number>(1);
+  const [noOfAdults, setNoOfAdults] = useState<number>(1);
+  const [noOfChildren, setNoOfChildren] = useState<number>(1);
   const [time, setTime] = useState<string>("10:00");
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -31,10 +32,20 @@ export default function BookingPage() {
     dining: 24,
   };
 
-  const openingHours = {
-    open: "10:00",
-    close: "22:00",
-  };
+  const hours = [
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+  ];
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,6 +57,14 @@ export default function BookingPage() {
       return;
     }
 
+    if (noOfAdults + noOfChildren > maxParticipants[activity]) {
+      setIsError(true);
+      setErrorMessage(
+        "Antal deltagere må ikke overstige " + maxParticipants[activity]
+      );
+      return;
+    }
+
     console.log("Form submitted");
 
     setIsError(false);
@@ -53,19 +72,34 @@ export default function BookingPage() {
     console.log({
       date: date,
       activity: activity,
-      participants: participants,
+      noOfAdults: noOfAdults,
+      noOfChildren: noOfChildren,
       time: time,
     });
   };
 
-  const handleParticipantsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.valueAsNumber;
-    if (isNaN(value)) return setParticipants(1);
+  const handleNoOfAdultsChange = (e: string) => {
+    const value = e ? parseInt(e) : 1;
+    if (isNaN(value)) return setNoOfAdults(1);
     if (value < 1 || value > maxParticipants[activity]) {
-      setParticipants(maxParticipants[activity]);
+      setNoOfAdults(maxParticipants[activity]);
     } else {
-      setParticipants(value);
+      setNoOfAdults(value);
     }
+  };
+
+  const handleNoOfChildrenChange = (e: string) => {
+    const value = e ? parseInt(e) : 1;
+    if (isNaN(value)) return setNoOfChildren(1);
+    if (value < 1 || value > maxParticipants[activity]) {
+      setNoOfChildren(maxParticipants[activity]);
+    } else {
+      setNoOfChildren(value);
+    }
+  };
+
+  const handleActivityChange = (value: string) => {
+    setActivity(value as "bowling" | "airhockey" | "dining");
   };
 
   const handleSelectedDate = (e: Date | Date[] | undefined) => {
@@ -77,25 +111,19 @@ export default function BookingPage() {
     if ((e as Date) >= new Date()) setDate(e as Date);
   };
 
-  useEffect(() => {
-    if (maxParticipants[activity] < participants) {
-      setParticipants(maxParticipants[activity]);
-    }
-  }, [activity]);
-
   return (
-    <div className="max-w-[400px] mx-auto bg-gray-100 mt-6 p-4 rounded">
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col justify-center px-4">
-          <h1 className="text-2xl font-bold text-center">Reservér</h1>
-          <div className="mt-4">
+    <div className="max-w-[1080px] mx-auto bg-gray-100 mt-6 p-4 rounded">
+      <form onSubmit={handleSubmit} className="px-4">
+        <h1 className="text-2xl font-bold text-center">Reservér</h1>
+        <div className="flex flex-wrap justify-between gap-2 mt-4">
+          <div>
             <p className="mb-2 font-medium">Dato</p>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-[240px] justify-start text-left font-normal",
+                    "w-[170px] justify-start text-left font-normal",
                     !date && "text-muted-foreground"
                   )}
                 >
@@ -118,7 +146,21 @@ export default function BookingPage() {
               </PopoverContent>
             </Popover>
           </div>
-          <div className="mt-4">
+          <div>
+            <p className="mb-2 font-medium">
+              Start tidspunkt{" "}
+              {/* <span className="font-light text-[14px]">
+                (åbent {openingHours["open"]} - {openingHours["close"]})
+              </span> */}
+            </p>
+            <Dropdown
+              className="w-[170px]"
+              options={hours}
+              onSelect={setTime}
+              defaultText="Vælg start tidspunkt"
+            />
+          </div>
+          {/* <div className="mt-4">
             <p className="mb-2 font-medium">Aktivitet</p>
             <RadioGroup
               defaultValue={activity}
@@ -143,51 +185,43 @@ export default function BookingPage() {
                 <Label htmlFor="r3">Middag</Label>
               </div>
             </RadioGroup>
-          </div>
-          <div className="mt-4">
-            <p className="mb-2 font-medium">
-              Antal deltagere{" "}
-              <span className="font-light text-[14px]">
-                (Max{" "}
-                <span className="font-medium text-[14px]">
-                  {maxParticipants[activity]}
-                </span>{" "}
-                deltagere)
-              </span>
-            </p>
-            <Input
-              className="bg-white"
-              type="number"
-              min={1}
-              max={24}
-              value={participants}
-              onChange={handleParticipantsChange}
-              placeholder="Antal deltagere"
+          </div> */}
+          <div>
+            <p className="mb-2 font-medium">Voksne</p>
+            <Dropdown
+              className="w-[170px]"
+              options={Array.from({ length: 25 }, (_, i) => i.toString())}
+              onSelect={handleNoOfAdultsChange}
+              defaultText="Vælg antal voksne"
             />
           </div>
-          <div className="mt-4">
-            <p className="mb-2 font-medium">
-              Start tidspunkt{" "}
-              <span className="font-light text-[14px]">
-                (åbent {openingHours["open"]} - {openingHours["close"]})
-              </span>
-            </p>
-            <Input
-              className="bg-white"
-              type="time"
-              min={openingHours["open"]}
-              max={openingHours["close"]}
-              step="3600"
-              value={time}
-              onChange={e => setTime(e.target.value)}
-              placeholder="Antal deltagere"
+          <div>
+            <p className="mb-2 font-medium">Børn</p>
+            <Dropdown
+              className="w-[170px]"
+              options={Array.from({ length: 25 }, (_, i) => i.toString())}
+              onSelect={handleNoOfChildrenChange}
+              defaultText="Vælg antal børn"
             />
           </div>
-          <Button type="submit" className="mt-4">
-            Videre
+          <div>
+            <p className="mb-2 font-medium">Aktivitet</p>
+            <Dropdown
+              className="w-[170px]"
+              options={["Bowling", "Airhockey", "Dining"]}
+              onSelect={handleActivityChange}
+              defaultText="Vælg aktivitet"
+            />
+          </div>
+        </div>
+        <div className="flex flex-wrap justify-center gap-2">
+          <Button type="submit" className="mt-6 min-w-[180px]">
+            Søg efter ledige tider
           </Button>
-          <div className="mt-4 font-medium text-center text-red-600">
-            {isError && <p>{errorMessage}</p>}
+        </div>
+        <div className="flex flex-col justify-center">
+          <div className="font-medium text-center text-red-600">
+            {isError && <p className="mt-2">{errorMessage}</p>}
           </div>
         </div>
       </form>
