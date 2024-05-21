@@ -11,3 +11,17 @@ export interface UserData {
     name: string;
     address: string;
   }
+
+  export interface Product {
+    id?: number;
+    name: string;
+    stock: number;
+    price: number;
+    description: string;
+    imageUrl: string;
+    productCategory: string;
+  }
+
+  export interface Category {
+    name: string;
+  }
