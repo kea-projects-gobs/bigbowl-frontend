@@ -6,6 +6,7 @@ import LoginPage from "./pages/login/LoginPage";
 import Logout from "./pages/login/Logout";
 import CreateUserPage from "./pages/signup/CreateUserPage";
 import AdminPage from "./pages/management/AdminPage";
+import RequireAuth from "./security/RequireAuth";
 
 function App() {
   return (
@@ -16,7 +17,12 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/signup" element={<CreateUserPage />} />
-          <Route path="/admin" element={<AdminPage />} />
+
+          <Route path="/admin" element={
+            <RequireAuth roles={["EMPLOYEE"]}>
+              <AdminPage />
+            </RequireAuth>
+          } />
         </Routes>
       </Layout>
     </>
