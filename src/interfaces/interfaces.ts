@@ -25,3 +25,22 @@ export interface UserData {
   export interface Category {
     name: string;
   }
+
+  export interface ProductRef {
+    id: number;
+  }
+
+  export interface Sale {
+    id?: number;
+    date: string;
+    employee: string;
+    salesItems: SalesItem[];
+    
+  }
+
+  export interface SalesItem {
+    id?: number;
+    product: Product;
+    quantity: number;
+    unitPrice: number;
+  }

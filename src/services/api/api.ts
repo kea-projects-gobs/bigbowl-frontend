@@ -2,9 +2,10 @@ import axios from "axios";
 import axiosWithAuth from "../../security/axios";
 import { UserData } from "../../interfaces/interfaces";
 import { API_URL } from "../../settings";
-import { Product } from "../../interfaces/interfaces";
+import { Product, Sale } from "../../interfaces/interfaces";
 
 const API_URL_PRODUCTS = `${API_URL}/products`;
+const API_URL_SALES = `${API_URL}/sales`;
 
 export const createUserWithRole = async (userData: UserData) => {
   try {
@@ -39,5 +40,17 @@ export const deleteProducts = async (id: number) => {
 
 export const getCategories = async () => {
   return axiosWithAuth.get(`${API_URL}/product-categories`);
+}
+
+export const getSales = async () => {
+  return axiosWithAuth.get(API_URL_SALES);
+}
+
+export const getSalesById = async (id: number) => {
+  return axiosWithAuth.get(`${API_URL_SALES}/${id}`);
+}
+
+export const createSales = async (sale: Sale) => {
+  return axiosWithAuth.post(API_URL_SALES, sale);
 }
 
