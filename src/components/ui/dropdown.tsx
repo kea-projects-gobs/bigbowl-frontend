@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
@@ -10,12 +10,12 @@ interface DropdownProps {
   className?: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({
+const Dropdown = ({
   options,
   onSelect,
   defaultText,
   className,
-}) => {
+}: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
