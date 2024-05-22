@@ -28,7 +28,7 @@ const SalesComponent: React.FC = () => {
           console.error('Product ID is undefined');
           return;
         }
-    
+ 
         const existingItem = basket.find((item) => item.product.id === product.id);
         let updatedBasket;
         if (existingItem) {
@@ -36,7 +36,7 @@ const SalesComponent: React.FC = () => {
             item.product.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
           );
         } else {
-          updatedBasket = [...basket, { product: { id: product.id }, quantity: 1 }];
+          updatedBasket = [...basket, { product, quantity: 1 }];
         }
         setBasket(updatedBasket);
         localStorage.setItem('salesBasket', JSON.stringify(updatedBasket));

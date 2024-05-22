@@ -33,6 +33,7 @@ export interface UserData {
   }
 
   export interface SalesItem {
-    product: { id: number}
+    //product: { id: number}
+    product: Product;
     quantity: number;
   }
