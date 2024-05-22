@@ -6,9 +6,16 @@ interface SalePriceProps {
   decrementQuantity: (productId: number) => void;
 }
 
-const PriceComponent: React.FC<SalePriceProps> = ({ basket, incrementQuantity, decrementQuantity }) => {
+const PriceComponent: React.FC<SalePriceProps> = ({
+  basket,
+  incrementQuantity,
+  decrementQuantity,
+}) => {
   const calculateTotalPrice = () => {
-    return basket.reduce((total, item) => total + item.product.price * item.quantity, 0);
+    return basket.reduce(
+      (total, item) => total + item.product.price * item.quantity,
+      0
+    );
   };
 
   return (
@@ -18,7 +25,9 @@ const PriceComponent: React.FC<SalePriceProps> = ({ basket, incrementQuantity, d
         {basket.map((item, index) => (
           <div key={item.product.id}>
             <li className="flex justify-between items-center mb-2">
-              <span>{item.product.name} {item.product.description} x {item.quantity}</span>
+              <span>
+                {item.product.name} {item.product.description} x {item.quantity}
+              </span>
               <div className="flex items-center">
                 <button
                   className="bg-gray-200 px-2 py-1 rounded mr-2"
@@ -32,7 +41,9 @@ const PriceComponent: React.FC<SalePriceProps> = ({ basket, incrementQuantity, d
                 >
                   +
                 </button>
-                <span className="ml-4">{(item.product.price * item.quantity).toFixed(2)} DKK</span>
+                <span className="ml-4 w-24 text-right">
+                  {(item.product.price * item.quantity).toFixed(2)} DKK
+                </span>
               </div>
             </li>
             {index < basket.length - 1 && <hr className="my-2" />}
@@ -49,4 +60,3 @@ const PriceComponent: React.FC<SalePriceProps> = ({ basket, incrementQuantity, d
 };
 
 export default PriceComponent;
-

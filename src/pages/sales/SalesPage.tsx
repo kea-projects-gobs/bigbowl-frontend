@@ -56,7 +56,7 @@ const SalesPage: React.FC = () => {
                 <div className="border rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition-transform duration-200 hover:scale-105 h-full flex flex-col">
                   <img src={product.imageUrl} alt={product.name} className="w-full h-48 object-contain mx-auto mt-2" />
                   <div className="p-4 text-center flex-grow">
-                    <span className="text-lg font-medium">{product.name}</span>
+                    <span className="text-lg ">{product.name}</span>
                     <p className="text-md font-medium">{product.price} DKK</p>
                     <p className="text-sm font-medium">{product.description}</p>
                   </div>

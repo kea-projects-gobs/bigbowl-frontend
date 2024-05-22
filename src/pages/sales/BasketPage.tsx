@@ -4,6 +4,8 @@ import { createSales } from "@/services/api/api";
 import { useBasket } from "@/context/BasketProvider";
 import PriceComponent from "./PriceComponent";
 
+import { Button } from "@/components/ui/button";
+
 const BasketPage: React.FC = () => {
   const [basket, setBasket] = useState<SalesItem[]>([]);
   const { updateBasketCount } = useBasket();
@@ -36,36 +38,40 @@ const BasketPage: React.FC = () => {
 
   const incrementQuantity = (productId: number) => {
     const updatedBasket = basket.map((item) =>
-      item.product.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+      item.product.id === productId
+        ? { ...item, quantity: item.quantity + 1 }
+        : item
     );
     setBasket(updatedBasket);
-    localStorage.setItem('salesBasket', JSON.stringify(updatedBasket));
+    localStorage.setItem("salesBasket", JSON.stringify(updatedBasket));
     updateBasketCount();
   };
 
   const decrementQuantity = (productId: number) => {
     const updatedBasket = basket
       .map((item) =>
-        item.product.id === productId ? { ...item, quantity: item.quantity - 1 } : item
+        item.product.id === productId
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
       )
       .filter((item) => item.quantity > 0);
     setBasket(updatedBasket);
-    localStorage.setItem('salesBasket', JSON.stringify(updatedBasket));
+    localStorage.setItem("salesBasket", JSON.stringify(updatedBasket));
     updateBasketCount();
   };
 
   return (
     <div>
       <h2 className="text-2xl font-bold my-4 ml-2">Kurv</h2>
-      <PriceComponent basket={basket} incrementQuantity={incrementQuantity} decrementQuantity={decrementQuantity} />
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
-        onClick={confirmSale}
-      >
+      <PriceComponent
+        basket={basket}
+        incrementQuantity={incrementQuantity}
+        decrementQuantity={decrementQuantity}
+      />
+      <Button className="py-6 text-1xl my-4" onClick={confirmSale}>
         Bekræft salg
-      </button>
+      </Button>
     </div>
-    
   );
 };
 
