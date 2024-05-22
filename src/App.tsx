@@ -8,7 +8,7 @@ import CreateUserPage from "./pages/signup/CreateUserPage";
 import BookingPage from "./pages/booking/BookingPage";
 import AdminPage from "./pages/management/AdminPage";
 import RequireAuth from "./security/RequireAuth";
-import SalesComponent from "./pages/sales/SalesComponent";
+import SalesPage from "./pages/sales/SalesPage";
 import BasketPage from "./pages/sales/BasketPage";
 import { BasketProvider } from "./context/BasketProvider";
 
@@ -25,7 +25,7 @@ function App() {
           <Route path="/signup" element={<CreateUserPage />} />
           <Route path="/sales" element={
           <RequireAuth roles={["EMPLOYEE"]}>
-            <SalesComponent />
+            <SalesPage />
           </RequireAuth>
           } />
           <Route path="/sales/basket" element={

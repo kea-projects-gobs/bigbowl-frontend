@@ -3,7 +3,7 @@ import { Product, SalesItem } from "@/interfaces/interfaces";
 import { getProducts } from "@/services/api/api";
 import { useBasket } from "../../context/BasketProvider";
 
-const SalesComponent: React.FC = () => {
+const SalesPage: React.FC = () => {
     const [basket, setBasket] = useState<SalesItem[]>(() => {
         const storedBasket = localStorage.getItem('salesBasket');
         if (storedBasket) {
@@ -45,7 +45,7 @@ const SalesComponent: React.FC = () => {
     
       return (
         <div>
-          <h2 className="text-2xl font-bold my-4 ml-2">Sales</h2>
+          <h2 className="text-2xl font-bold my-4 ml-2">Salg</h2>
           <div className="flex flex-wrap mx-2">
             {products.map((product) => (
               <div
@@ -68,4 +68,4 @@ const SalesComponent: React.FC = () => {
       );
   };
   
-  export default SalesComponent;
+  export default SalesPage;

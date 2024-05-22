@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { SalesItem, Sale } from "@/interfaces/interfaces";
 import { createSales } from "@/services/api/api";
 import { useBasket } from "@/context/BasketProvider";
+import PriceComponent from "./PriceComponent";
 
 const BasketPage: React.FC = () => {
   const [basket, setBasket] = useState<SalesItem[]>([]);
@@ -55,37 +56,16 @@ const BasketPage: React.FC = () => {
 
   return (
     <div>
-    <h2 className="text-2xl font-bold mb-4">Basket</h2>
-    <ul className="mb-4">
-      {basket.map((item) => (
-        <li key={item.product.id} className="flex items-center justify-between mb-2">
-          <div>
-            {item.product.name} - Quantity: {item.quantity}
-          </div>
-          <div className="flex items-center">
-            <button
-              className="bg-gray-200 px-2 py-1 rounded mr-2"
-              onClick={() => decrementQuantity(item.product.id!)}
-            >
-              -
-            </button>
-            <button
-              className="bg-gray-200 px-2 py-1 rounded"
-              onClick={() => incrementQuantity(item.product.id!)}
-            >
-              +
-            </button>
-          </div>
-        </li>
-      ))}
-    </ul>
-    <button
-      className="bg-blue-500 text-white px-4 py-2 rounded"
-      onClick={confirmSale}
-    >
-      Confirm Sale
-    </button>
-  </div>
+      <h2 className="text-2xl font-bold my-4 ml-2">Kurv</h2>
+      <PriceComponent basket={basket} incrementQuantity={incrementQuantity} decrementQuantity={decrementQuantity} />
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+        onClick={confirmSale}
+      >
+        Bekræft salg
+      </button>
+    </div>
+    
   );
 };
 
