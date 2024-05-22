@@ -3,8 +3,6 @@ import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { da } from "date-fns/locale";
-// import { Label } from "@/components/ui/label";
-// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -14,6 +12,22 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Dropdown from "@/components/ui/dropdown";
+import BowlingCard from "@/components/BowlingCard";
+
+type ReservationItem = {
+  activityId: number;
+  price: number;
+  startTime: string;
+  endTime: string;
+};
+
+type Reservation = {
+  activityType: string;
+  noOfAdults: number;
+  noOfChildren: number;
+  reservationItems: ReservationItem[];
+  totalPrice: number;
+};
 
 export default function BookingPage() {
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -25,6 +39,8 @@ export default function BookingPage() {
   const [time, setTime] = useState<string>("10:00");
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const [reservation, setReservation] = useState<Reservation[] | null>(null);
 
   const maxParticipants = {
     bowling: 24,
@@ -69,12 +85,32 @@ export default function BookingPage() {
 
     setIsError(false);
 
-    console.log({
-      date: date,
-      activity: activity,
-      noOfAdults: noOfAdults,
-      noOfChildren: noOfChildren,
-      time: time,
+    const newDate = new Date(date as Date);
+    newDate.setHours(parseInt(time.split(":")[0]));
+    newDate.setMinutes(parseInt(time.split(":")[1]));
+    setDate(newDate);
+
+    fetch("http://localhost:8080/api/activities", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        date: newDate,
+        activityType: activity,
+        noOfAdults: noOfAdults,
+        noOfChildren: noOfChildren,
+        startTime: time,
+      }),
+    }).then(res => {
+      if (res.ok) {
+        res.json().then(data => {
+          console.log(data);
+          setReservation(data);
+        });
+      } else {
+        console.log("Error");
+      }
     });
   };
 
@@ -112,10 +148,10 @@ export default function BookingPage() {
   };
 
   return (
-    <div className="max-w-[1080px] mx-auto bg-gray-100 mt-6 p-4 rounded">
-      <form onSubmit={handleSubmit} className="px-4">
+    <div className="max-w-[1080px] mx-auto  rounded">
+      <form onSubmit={handleSubmit} className="p-4 px-4 mt-6 bg-gray-100">
         <h1 className="text-2xl font-bold text-center">Reservér</h1>
-        <div className="flex flex-wrap justify-between gap-2 mt-4">
+        <div className="flex flex-wrap justify-center gap-2 mt-4 sm:justify-between">
           <div>
             <p className="mb-2 font-medium">Dato</p>
             <Popover>
@@ -123,7 +159,7 @@ export default function BookingPage() {
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-[170px] justify-start text-left font-normal",
+                    "w-[300px] sm:w-[170px] justify-start text-left font-normal",
                     !date && "text-muted-foreground"
                   )}
                 >
@@ -154,7 +190,7 @@ export default function BookingPage() {
               </span> */}
             </p>
             <Dropdown
-              className="w-[170px]"
+              className="w-[300px] sm:w-[170px]"
               options={hours}
               onSelect={setTime}
               defaultText="Vælg start tidspunkt"
@@ -189,7 +225,7 @@ export default function BookingPage() {
           <div>
             <p className="mb-2 font-medium">Voksne</p>
             <Dropdown
-              className="w-[170px]"
+              className="w-[300px] sm:w-[170px]"
               options={Array.from({ length: 25 }, (_, i) => i.toString())}
               onSelect={handleNoOfAdultsChange}
               defaultText="Vælg antal voksne"
@@ -198,7 +234,7 @@ export default function BookingPage() {
           <div>
             <p className="mb-2 font-medium">Børn</p>
             <Dropdown
-              className="w-[170px]"
+              className="w-[300px] sm:w-[170px]"
               options={Array.from({ length: 25 }, (_, i) => i.toString())}
               onSelect={handleNoOfChildrenChange}
               defaultText="Vælg antal børn"
@@ -207,15 +243,15 @@ export default function BookingPage() {
           <div>
             <p className="mb-2 font-medium">Aktivitet</p>
             <Dropdown
-              className="w-[170px]"
-              options={["Bowling", "Airhockey", "Dining"]}
+              className="w-[300px] sm:w-[170px]"
+              options={["Bowling", "Air Hockey", "Dining"]}
               onSelect={handleActivityChange}
               defaultText="Vælg aktivitet"
             />
           </div>
         </div>
         <div className="flex flex-wrap justify-center gap-2">
-          <Button type="submit" className="mt-6 min-w-[180px]">
+          <Button type="submit" className="mt-6 w-[300px] sm:w-[170px]">
             Søg efter ledige tider
           </Button>
         </div>
@@ -225,6 +261,13 @@ export default function BookingPage() {
           </div>
         </div>
       </form>
+      <section className="flex flex-wrap justify-center gap-2 mt-10">
+        {reservation && reservation.length > 0 ? (
+          reservation.map((res, i) => <BowlingCard key={i} {...res} />)
+        ) : (
+          <p className="text-center">Ingen ledige tider</p>
+        )}
+      </section>
     </div>
   );
 }
