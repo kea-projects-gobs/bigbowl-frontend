@@ -1,4 +1,4 @@
-import { useAuth } from "./AuthProvider";
+import { useAuth } from "../context/AuthProvider";
 import { NavLink, Link } from "react-router-dom";
 
 interface AuthStatusProps {

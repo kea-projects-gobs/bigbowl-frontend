@@ -8,10 +8,14 @@ import CreateUserPage from "./pages/signup/CreateUserPage";
 import BookingPage from "./pages/booking/BookingPage";
 import AdminPage from "./pages/management/AdminPage";
 import RequireAuth from "./security/RequireAuth";
+import SalesComponent from "./pages/sales/SalesComponent";
+import BasketPage from "./pages/sales/BasketPage";
+import { BasketProvider } from "./context/BasketProvider";
 
 function App() {
   return (
     <>
+    <BasketProvider>
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -19,6 +23,16 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/signup" element={<CreateUserPage />} />
+          <Route path="/sales" element={
+          <RequireAuth roles={["EMPLOYEE"]}>
+            <SalesComponent />
+          </RequireAuth>
+          } />
+          <Route path="/sales/basket" element={
+          <RequireAuth roles={["EMPLOYEE"]}>
+            <BasketPage />
+          </RequireAuth>
+          } />
 
           <Route
             path="/admin"
@@ -30,6 +44,7 @@ function App() {
           />
         </Routes>
       </Layout>
+    </BasketProvider>
     </>
   );
 }

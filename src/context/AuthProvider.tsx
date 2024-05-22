@@ -5,9 +5,9 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-import { authProvider, LoginRequest, LoginResponse, User } from "./authUtils";
+import { authProvider, LoginRequest, LoginResponse, User } from "../security/authUtils";
 import { jwtDecode } from "jwt-decode";
-import getToken from "./authToken";
+import getToken from "../security/authToken";
 
 interface AuthContextType {
   username: string | null;

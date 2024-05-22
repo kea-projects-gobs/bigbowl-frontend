@@ -1,6 +1,6 @@
 import  { useState } from 'react';
 import { ProductManager } from './ProductsManager';
-import { useAuth } from '../../security/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 
 export default function AdminPage() {
   const auth = useAuth();
