@@ -1,7 +1,8 @@
 import { useState } from "react";
 import InputField from "../../components/InputField";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { useAuth } from "../../security/AuthProvider";
+import { useAuth } from "../../context/AuthProvider";
+import { Button } from "@/components/ui/button";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -45,12 +46,12 @@ export default function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
         />
         {error && <div className="text-red-500 mt-2">{error}</div>}
-        <button
+        <Button
           type="submit"
-          className="bg-blue-500 text-white font-bold px-4 py-2 rounded-md mt-4"
+          className="px-4 py-2 rounded-md mt-4"
         >
           Log ind
-        </button>
+        </Button>
 
         <div className="mt-2">
           Har du ikke en bruger?{" "}
