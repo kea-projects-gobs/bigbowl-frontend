@@ -3,6 +3,7 @@ import { getProducts, createProducts, updateProducts, deleteProducts, getCategor
 import Modal from "../../components/Modal";
 import InputField from "../../components/InputField";
 import { Product, Category } from "../../interfaces/interfaces";
+import { Button } from "@/components/ui/button";
 
 export function ProductManager() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -117,12 +118,12 @@ export function ProductManager() {
       <h1 className="text-3xl font-bold leading-tight text-gray-900">
         Administration
       </h1>
-      <button
+      <Button
         onClick={() => openModal("create")}
-        className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="mt-4 py-2 px-4 rounded"
       >
         Tilføj nyt produkt
-      </button>
+      </Button>
 
       <ul className="mt-6">
         {products.map(product => (
@@ -214,12 +215,12 @@ export function ProductManager() {
               </select>
             </div>
 
-            <button
+            <Button
               type="submit"
-              className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="mt-4 py-2 px-4 rounded"
             >
               {modalType === "create" ? "Opret produkt" : "Gem ændringer"}
-            </button>
+            </Button>
           </form>
         ) : (
           <div>

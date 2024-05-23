@@ -1,6 +1,7 @@
 import  { useState } from 'react';
 import { ProductManager } from './ProductsManager';
 import { useAuth } from '../../context/AuthProvider';
+import { Button } from '@/components/ui/button';
 
 export default function AdminPage() {
   const auth = useAuth();
@@ -17,27 +18,33 @@ export default function AdminPage() {
 
   return (
     <div>
-      <div className="mb-4 flex flex-wrap gap-4 m-auto justify-center sm:flex-nowrap">
+      <div className="mb-4 mt-2 flex flex-wrap gap-4 m-auto justify-center sm:flex-nowrap">
         {auth?.isLoggedInAs(["EMPLOYEE"]) && (
       <>
-        <button
+        <Button
           onClick={() => setActiveTab('products')}
-          className={`flex-1 py-2 px-4 font-bold ${activeTab === 'products' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'} rounded-l`}
-        >
+          variant={activeTab === 'products' ? 'default' : 'outline'}
+          size="default"
+          className="flex-1 rounded-l"
+          >
           Produkter
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => setActiveTab('test1')}
-          className={`flex-1 py-2 px-4 font-bold ${activeTab === 'test1' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'} rounded-l`}
-        >
+          variant={activeTab === 'test1' ? 'default' : 'outline'}
+          size="default"
+          className="flex-1 rounded-l"
+          >
           Bowling baner
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => setActiveTab('test2')}
-          className={`flex-1 py-2 px-4 font-bold ${activeTab === 'test2' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'} rounded-l`}
-        >
+          variant={activeTab === 'test2' ? 'default' : 'outline'}
+          size="default"
+          className="flex-1 rounded-l"
+          >
           Udstyr
-        </button>
+        </Button>
         </>
         )}
       </div>
