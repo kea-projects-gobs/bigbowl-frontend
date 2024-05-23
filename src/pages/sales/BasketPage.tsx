@@ -3,12 +3,16 @@ import { SalesItem, Sale } from "@/interfaces/interfaces";
 import { createSales } from "@/services/api/api";
 import { useBasket } from "@/context/BasketProvider";
 import PriceComponent from "./PriceComponent";
+import ConfirmComponent from "./ConfirmComponent";
+import { useToast } from "@/components/ui/use-toast";
 
 import { Button } from "@/components/ui/button";
 
 const BasketPage: React.FC = () => {
   const [basket, setBasket] = useState<SalesItem[]>([]);
+  const [saleConfirmed, setSaleConfirmed] = useState(false);
   const { updateBasketCount } = useBasket();
+  const { toast } = useToast();
 
   useEffect(() => {
     const storedBasket = localStorage.getItem("salesBasket");
@@ -18,6 +22,15 @@ const BasketPage: React.FC = () => {
   }, []);
 
   const confirmSale = async () => {
+    // Burde også været et tjek i backenden (men det er der ikke :D)
+    if (basket.length === 0) {
+      toast({
+        title: "Ingen varer i kurven",
+        description: "Tilføj venligst varer til kurven, og prøv igen",
+        variant: "destructive",
+      });
+      return;
+    }
     try {
       const sale: Sale = {
         salesItems: basket,
@@ -28,6 +41,7 @@ const BasketPage: React.FC = () => {
         setBasket([]);
         localStorage.removeItem("salesBasket");
         updateBasketCount();
+        setSaleConfirmed(true);
       } else {
         console.error("Failed to confirm sale:", response.status);
       }
@@ -62,15 +76,20 @@ const BasketPage: React.FC = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold my-4 ml-2">Kurv</h2>
-      <PriceComponent
+      {!saleConfirmed && (
+        <>
+        <h2 className="text-2xl font-bold my-4 ml-2">Kurv</h2>
+        <PriceComponent
         basket={basket}
         incrementQuantity={incrementQuantity}
         decrementQuantity={decrementQuantity}
-      />
-      <Button className="py-6 text-1xl my-4" onClick={confirmSale}>
-        Bekræft salg
-      </Button>
+        />
+        <Button className="py-6 text-1xl my-4" onClick={confirmSale}>
+          Bekræft salg
+        </Button>
+        </>
+      )}
+      {saleConfirmed && <ConfirmComponent />}
     </div>
   );
 };
