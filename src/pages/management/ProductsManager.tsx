@@ -135,18 +135,20 @@ export function ProductManager() {
                 {product.name}
             </span>
             <div>
-              <button
+              <Button
                 onClick={() => openModal("edit", product)}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded mr-2"
+                variant="secondary"
+                className="py-1 px-3 rounded mr-2"
               >
                 Rediger
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => openModal("delete", product)}
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded"
+                variant="secondary"
+                className="py-1 px-3 rounded"
               >
                 Slet
-              </button>
+              </Button>
             </div>
           </li>
         ))}
@@ -233,18 +235,20 @@ export function ProductManager() {
               </h2>
             </div>
             <div className="flex justify-end items-center p-4 mt-4 border-t border-gray-200">
-              <button
+              <Button
                 onClick={handleDelete}
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-l"
+                variant="destructive"
+                className=" py-2 px-4 rounded-l"
               >
                 Ja, slet
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setIsModalOpen(false)}
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-r ml-2"
+                variant="secondary"
+                className=" py-2 px-4 rounded-r ml-2"
               >
                 Nej, gå tilbage
-              </button>
+              </Button>
             </div>
           </div>
         )}
