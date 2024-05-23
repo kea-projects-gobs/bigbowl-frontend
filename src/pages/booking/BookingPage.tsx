@@ -12,11 +12,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Dropdown from "@/components/ui/dropdown";
-import BowlingCard from "@/components/BowlingCard";
+import ActivityCard from "@/components/ActivityCard";
 
 type ReservationItem = {
   activityId: number;
   price: number;
+  activityName: string;
   startTime: string;
   endTime: string;
 };
@@ -31,9 +32,9 @@ type Reservation = {
 
 export default function BookingPage() {
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const [activity, setActivity] = useState<"bowling" | "airhockey" | "dining">(
-    "bowling"
-  );
+  const [activity, setActivity] = useState<
+    "Bowling" | "Air Hockey" | "Bowling+Dining" | "Air Hockey+Dining"
+  >("Bowling");
   const [noOfAdults, setNoOfAdults] = useState<number>(1);
   const [noOfChildren, setNoOfChildren] = useState<number>(1);
   const [time, setTime] = useState<string>("10:00");
@@ -42,11 +43,11 @@ export default function BookingPage() {
 
   const [reservation, setReservation] = useState<Reservation[] | null>(null);
 
-  const maxParticipants = {
-    bowling: 24,
-    airhockey: 12,
-    dining: 24,
-  };
+  //   const maxParticipants = {
+  //     bowling: 24,
+  //     airhockey: 12,
+  //     dining: 24,
+  //   };
 
   const hours = [
     "10:00",
@@ -73,13 +74,13 @@ export default function BookingPage() {
       return;
     }
 
-    if (noOfAdults + noOfChildren > maxParticipants[activity]) {
-      setIsError(true);
-      setErrorMessage(
-        "Antal deltagere må ikke overstige " + maxParticipants[activity]
-      );
-      return;
-    }
+    // if (noOfAdults + noOfChildren > maxParticipants[activity]) {
+    //   setIsError(true);
+    //   setErrorMessage(
+    //     "Antal deltagere må ikke overstige " + maxParticipants[activity]
+    //   );
+    //   return;
+    // }
 
     console.log("Form submitted");
 
@@ -116,26 +117,29 @@ export default function BookingPage() {
 
   const handleNoOfAdultsChange = (e: string) => {
     const value = e ? parseInt(e) : 1;
-    if (isNaN(value)) return setNoOfAdults(1);
-    if (value < 1 || value > maxParticipants[activity]) {
-      setNoOfAdults(maxParticipants[activity]);
-    } else {
-      setNoOfAdults(value);
-    }
+    // if (isNaN(value)) return setNoOfAdults(1);
+    // if (value < 1 || value > maxParticipants[activity]) {
+    //   setNoOfAdults(maxParticipants[activity]);
+    // } else {
+    setNoOfAdults(value);
+    // }
   };
 
   const handleNoOfChildrenChange = (e: string) => {
     const value = e ? parseInt(e) : 1;
-    if (isNaN(value)) return setNoOfChildren(1);
-    if (value < 1 || value > maxParticipants[activity]) {
-      setNoOfChildren(maxParticipants[activity]);
-    } else {
-      setNoOfChildren(value);
-    }
+    // if (isNaN(value)) return setNoOfChildren(1);
+    // if (value < 1 || value > maxParticipants[activity]) {
+    //   setNoOfChildren(maxParticipants[activity]);
+    // } else {
+    setNoOfChildren(value);
+    // }
   };
 
   const handleActivityChange = (value: string) => {
-    setActivity(value as "bowling" | "airhockey" | "dining");
+    if (value === "Bowling") setActivity("Bowling");
+    if (value === "Air Hockey") setActivity("Air Hockey");
+    if (value === "Bowling + Middag") setActivity("Bowling+Dining");
+    if (value === "Air Hockey + Middag") setActivity("Air Hockey+Dining");
   };
 
   const handleSelectedDate = (e: Date | Date[] | undefined) => {
@@ -145,6 +149,11 @@ export default function BookingPage() {
     console.log(e);
 
     if ((e as Date) >= new Date()) setDate(e as Date);
+  };
+
+  const handleAddToCart = (reservation: Reservation) => {
+    console.log(reservation);
+    localStorage.setItem("reservation", JSON.stringify(reservation));
   };
 
   return (
@@ -196,32 +205,6 @@ export default function BookingPage() {
               defaultText="Vælg start tidspunkt"
             />
           </div>
-          {/* <div className="mt-4">
-            <p className="mb-2 font-medium">Aktivitet</p>
-            <RadioGroup
-              defaultValue={activity}
-              onValueChange={value =>
-                setActivity(value as "bowling" | "airhockey" | "dining")
-              }
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem className="bg-white" value="bowling" id="r1" />
-                <Label htmlFor="r1">Bowling</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  className="bg-white"
-                  value="airhockey"
-                  id="r2"
-                />
-                <Label htmlFor="r2">Air hockey</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem className="bg-white" value="dining" id="r3" />
-                <Label htmlFor="r3">Middag</Label>
-              </div>
-            </RadioGroup>
-          </div> */}
           <div>
             <p className="mb-2 font-medium">Voksne</p>
             <Dropdown
@@ -244,7 +227,12 @@ export default function BookingPage() {
             <p className="mb-2 font-medium">Aktivitet</p>
             <Dropdown
               className="w-[300px] sm:w-[170px]"
-              options={["Bowling", "Air Hockey", "Dining"]}
+              options={[
+                "Bowling",
+                "Air Hockey",
+                "Bowling + Middag",
+                "Air Hockey + Middag",
+              ]}
               onSelect={handleActivityChange}
               defaultText="Vælg aktivitet"
             />
@@ -263,7 +251,13 @@ export default function BookingPage() {
       </form>
       <section className="flex flex-wrap justify-center gap-2 mt-10">
         {reservation && reservation.length > 0 ? (
-          reservation.map((res, i) => <BowlingCard key={i} {...res} />)
+          reservation.map((res, i) => (
+            <ActivityCard
+              key={i}
+              reservation={res}
+              handleAddToCart={handleAddToCart}
+            />
+          ))
         ) : (
           <p className="text-center">Ingen ledige tider</p>
         )}
