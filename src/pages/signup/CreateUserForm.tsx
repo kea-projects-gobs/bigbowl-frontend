@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../../components/InputField";
 import { createUserWithRole } from "../../services/api/api";
+import { Button } from "@/components/ui/button";
 
 interface HttpError extends Error {
   response?: {
@@ -49,7 +50,7 @@ export default function CreateUserForm() {
   };
 
   return (
-    <div>
+    <div className="my-4">
       {/* <InputField
         label="Name"
         type="text"
@@ -99,12 +100,12 @@ export default function CreateUserForm() {
         onChange={(e) => setRepeatPassword(e.target.value)}
       /> */}
       {error && <div className="text-red-500 mt-2">{error}</div>}
-      <button
+      <Button
         onClick={handleCreateUser}
-        className="bg-blue-500 text-white font-bold px-4 py-2 rounded-md mt-4"
+        className="px-4 py-2 rounded-md mt-4"
       >
         Opret bruger
-      </button>
+      </Button>
 
       <div className="mt-2">
         Har du allerede en bruger?{" "}
