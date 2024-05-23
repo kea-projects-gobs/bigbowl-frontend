@@ -5,9 +5,9 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-import { authProvider, LoginRequest, LoginResponse, User } from "./authUtils";
+import { authProvider, LoginRequest, LoginResponse, User } from "../security/authUtils";
 import { jwtDecode } from "jwt-decode";
-import getToken from "./authToken";
+import getToken from "../security/authToken";
 
 interface AuthContextType {
   username: string | null;
@@ -63,6 +63,10 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("roles");
+
+    // Clear basket items
+    localStorage.removeItem('salesBasket');
+    localStorage.removeItem('bookingBasket');
   };
 
   // If certain actions require a user to have multiple specific roles - we might need to change/adjust this logic
