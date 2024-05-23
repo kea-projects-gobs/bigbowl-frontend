@@ -12,6 +12,7 @@ import SalesPage from "./pages/sales/SalesPage";
 import BasketPage from "./pages/sales/BasketPage";
 import { BasketProvider } from "./context/BasketProvider";
 import { Toaster } from "./components/ui/toaster";
+import ConfirmComponent from "./pages/sales/ConfirmComponent";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
                 </RequireAuth>
               }
             />
+            <Route path="/sales/confirm" element={<ConfirmComponent/>}/>
 
             <Route
               path="/admin"
