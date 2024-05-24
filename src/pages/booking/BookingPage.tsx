@@ -13,22 +13,9 @@ import {
 } from "@/components/ui/popover";
 import Dropdown from "@/components/ui/dropdown";
 import ActivityCard from "@/components/ActivityCard";
-
-type ReservationItem = {
-  activityId: number;
-  price: number;
-  activityName: string;
-  startTime: string;
-  endTime: string;
-};
-
-type Reservation = {
-  activityType: string;
-  noOfAdults: number;
-  noOfChildren: number;
-  reservationItems: ReservationItem[];
-  totalPrice: number;
-};
+import { useNavigate } from "react-router-dom";
+import { Reservation } from "@/interfaces/types";
+import { getAvailableActivities } from "@/services/api/api";
 
 export default function BookingPage() {
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -43,11 +30,9 @@ export default function BookingPage() {
 
   const [reservation, setReservation] = useState<Reservation[] | null>(null);
 
-  //   const maxParticipants = {
-  //     bowling: 24,
-  //     airhockey: 12,
-  //     dining: 24,
-  //   };
+  const [tempReservationId, setTempReservationId] = useState<string>("");
+
+  const navigate = useNavigate();
 
   const hours = [
     "10:00",
@@ -60,29 +45,18 @@ export default function BookingPage() {
     "17:00",
     "18:00",
     "19:00",
-    "20:00",
-    "21:00",
   ];
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsError(false);
+    setTempReservationId("");
 
     if (!date) {
       setIsError(true);
       setErrorMessage("Vælg en dato");
       return;
     }
-
-    // if (noOfAdults + noOfChildren > maxParticipants[activity]) {
-    //   setIsError(true);
-    //   setErrorMessage(
-    //     "Antal deltagere må ikke overstige " + maxParticipants[activity]
-    //   );
-    //   return;
-    // }
-
-    console.log("Form submitted");
 
     setIsError(false);
 
@@ -91,48 +65,29 @@ export default function BookingPage() {
     newDate.setMinutes(parseInt(time.split(":")[1]));
     setDate(newDate);
 
-    fetch("http://localhost:8080/api/activities", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        date: newDate,
-        activityType: activity,
-        noOfAdults: noOfAdults,
-        noOfChildren: noOfChildren,
-        startTime: time,
-      }),
-    }).then(res => {
-      if (res.ok) {
-        res.json().then(data => {
-          console.log(data);
-          setReservation(data);
-        });
-      } else {
-        console.log("Error");
-      }
+    const res = await getAvailableActivities({
+      date: newDate,
+      activityType: activity,
+      noOfAdults: noOfAdults,
+      noOfChildren: noOfChildren,
+      startTime: time,
     });
+
+    if (res.status == 200) {
+      setReservation(res.data);
+    } else {
+      console.log("Error");
+    }
   };
 
   const handleNoOfAdultsChange = (e: string) => {
     const value = e ? parseInt(e) : 1;
-    // if (isNaN(value)) return setNoOfAdults(1);
-    // if (value < 1 || value > maxParticipants[activity]) {
-    //   setNoOfAdults(maxParticipants[activity]);
-    // } else {
     setNoOfAdults(value);
-    // }
   };
 
   const handleNoOfChildrenChange = (e: string) => {
     const value = e ? parseInt(e) : 1;
-    // if (isNaN(value)) return setNoOfChildren(1);
-    // if (value < 1 || value > maxParticipants[activity]) {
-    //   setNoOfChildren(maxParticipants[activity]);
-    // } else {
     setNoOfChildren(value);
-    // }
   };
 
   const handleActivityChange = (value: string) => {
@@ -153,7 +108,24 @@ export default function BookingPage() {
 
   const handleAddToCart = (reservation: Reservation) => {
     console.log(reservation);
+    if (reservation.tempReservationId === tempReservationId) {
+      setTempReservationId("");
+      localStorage.removeItem("reservation");
+      return;
+    }
+    setTempReservationId(reservation.tempReservationId);
     localStorage.setItem("reservation", JSON.stringify(reservation));
+  };
+
+  const navigateToReservationDetailsPage = async () => {
+    const reservation = JSON.parse(
+      localStorage.getItem("reservation") as string
+    );
+    console.log(reservation);
+
+    navigate("/login", {
+      state: { from: location.pathname + "/" + tempReservationId },
+    });
   };
 
   return (
@@ -251,9 +223,10 @@ export default function BookingPage() {
       </form>
       <section className="flex flex-wrap justify-center gap-2 mt-10">
         {reservation && reservation.length > 0 ? (
-          reservation.map((res, i) => (
+          reservation.map(res => (
             <ActivityCard
-              key={i}
+              choosen={res.tempReservationId === tempReservationId}
+              key={res.tempReservationId}
               reservation={res}
               handleAddToCart={handleAddToCart}
             />
@@ -262,6 +235,16 @@ export default function BookingPage() {
           <p className="text-center">Ingen ledige tider</p>
         )}
       </section>
+      <div className="flex justify-center">
+        {tempReservationId !== "" && (
+          <Button
+            onClick={navigateToReservationDetailsPage}
+            className="mt-6 w-full sm:w-[170px]"
+          >
+            Videre
+          </Button>
+        )}
+      </div>
     </div>
   );
 }
