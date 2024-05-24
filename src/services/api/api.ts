@@ -6,6 +6,7 @@ import { Product, Sale } from "../../interfaces/interfaces";
 
 const API_URL_PRODUCTS = `${API_URL}/products`;
 const API_URL_SALES = `${API_URL}/sales`;
+const API_URL_EQUIPMENT = `${API_URL}/equipment`;
 
 export const createUserWithRole = async (userData: UserData) => {
   try {
@@ -54,3 +55,19 @@ export const createSales = async (sale: Sale) => {
   return axiosWithAuth.post(API_URL_SALES, sale);
 }
 
+// Equipment
+export const getEquipment = async () => {
+  return axiosWithAuth.get(API_URL_EQUIPMENT);
+}
+
+export const getEquipmentById = async (id: number) => {
+  return axiosWithAuth.get(`${API_URL_EQUIPMENT}/${id}`);
+}
+
+export const orderReplacements = async (equipmentName: string) => {
+  return axiosWithAuth.post(`${API_URL_EQUIPMENT}/order`, null, {
+    params: {
+      equipmentName: equipmentName
+    }
+  });
+}

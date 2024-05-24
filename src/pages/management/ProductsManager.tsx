@@ -138,14 +138,14 @@ export function ProductManager() {
               <Button
                 onClick={() => openModal("edit", product)}
                 variant="secondary"
-                className="py-1 px-3 rounded mr-2"
+                className="py-1 px-3 rounded mr-2 hover:bg-gray-200"
               >
                 Rediger
               </Button>
               <Button
                 onClick={() => openModal("delete", product)}
                 variant="secondary"
-                className="py-1 px-3 rounded"
+                className="py-1 px-3 rounded hover:bg-gray-200"
               >
                 Slet
               </Button>
@@ -245,7 +245,7 @@ export function ProductManager() {
               <Button
                 onClick={() => setIsModalOpen(false)}
                 variant="secondary"
-                className=" py-2 px-4 rounded-r ml-2"
+                className=" py-2 px-4 rounded-r ml-2 hover:bg-gray-200"
               >
                 Nej, gå tilbage
               </Button>
