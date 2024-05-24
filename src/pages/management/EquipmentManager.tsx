@@ -77,7 +77,7 @@ export function EquipmentManager() {
             <div>
               <Button
                 variant="secondary"
-                className={`py-1 px-3 rounded mr-2 ${equipment.requiredAmount && equipment.requiredAmount > 0 ? "bg-red-500 text-white hover:bg-red-200" : "hover:bg-gray-200"}`}
+                className={`py-1 px-3 rounded mr-2 max-w-28 min-w-28 ${equipment.requiredAmount && equipment.requiredAmount > 0 ? "bg-red-500 text-white hover:bg-red-200" : "hover:bg-gray-200"}`}
                 onClick={() => orderEquipment(equipment.name)}
               >
                 {equipment.requiredAmount && equipment.requiredAmount > 0 ? `Bestil (${equipment.requiredAmount} nye)` : "Nok på lager"}
