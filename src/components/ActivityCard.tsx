@@ -1,4 +1,5 @@
 import bowling from "@/assets/bowling.png";
+import airhockey from "@/assets/airhockey.png";
 import { cn } from "@/lib/utils";
 // type BowlingCardProps = {
 //   activity: string;
@@ -19,6 +20,7 @@ type ReservationItem = {
 };
 
 type Reservation = {
+  tempReservationId: string;
   activityType: string;
   noOfAdults: number;
   noOfChildren: number;
@@ -29,6 +31,7 @@ type Reservation = {
 type ActivityCardProps = {
   reservation: Reservation;
   handleAddToCart: (reservation: Reservation) => void;
+  choosen: boolean;
 };
 
 const ActivityCard = (props: ActivityCardProps) => {
@@ -72,14 +75,20 @@ const ActivityCard = (props: ActivityCardProps) => {
     }
   }, 0);
 
+  const image =
+    reservation.activityType.toLowerCase().indexOf("bowling") != -1
+      ? bowling
+      : airhockey;
+
   return (
     <article
       className={cn(
-        "flex w-full sm:w-[534px] gap-10 p-6 bg-gray-100 rounded cursor-pointer hover:shadow-lg transition duration-300 ease-in-out"
+        "flex w-full sm:w-[534px] gap-10 p-6 bg-gray-100 rounded cursor-pointer hover:shadow-lg transition duration-300 ease-in-out",
+        props.choosen ? "bg-gray-300" : ""
       )}
       onClick={() => handleAddToCart(reservation)}
     >
-      <img className="w-[150px] rounded" src={bowling} alt="" />
+      <img className="w-[150px] rounded" src={image} alt="" />
       <div className="w-full">
         <p className="text-xl font-bold">{activityType}</p>
         <p className="opacity-55">
