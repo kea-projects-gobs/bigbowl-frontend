@@ -4,7 +4,6 @@ import { UserData } from "../../interfaces/interfaces";
 import { API_URL } from "../../settings";
 import { Product, Sale } from "../../interfaces/interfaces";
 import { AvailableActivity, Reservation } from "@/interfaces/types";
-import { DateRange } from "react-day-picker";
 
 const API_URL_PRODUCTS = `${API_URL}/products`;
 const API_URL_SALES = `${API_URL}/sales`;
