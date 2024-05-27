@@ -98,3 +98,8 @@ export const updateShift = async (id: number, shift: Shift) => {
 export const deleteShift = async (id: number) => {
   return axiosWithAuth.delete(`${API_URL_SHIFTS}/${id}`);
 }
+
+// get users
+export const getUsernames = async () => {
+  return axiosWithAuth.get(`${API_URL}/user-with-role`);
+}

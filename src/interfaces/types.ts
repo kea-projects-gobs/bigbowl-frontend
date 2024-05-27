@@ -1,3 +1,5 @@
+import { UserData } from "./interfaces";
+
 export type ReservationItem = {
   activityId: number;
   price: number;
@@ -22,3 +24,5 @@ export type AvailableActivity = {
   noOfChildren: number;
   startTime: string;
 };
+
+export type Username = Pick<UserData, "username">;

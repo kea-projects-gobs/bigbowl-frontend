@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 const ShiftCalendar = () => {
   const [shifts, setShifts] = useState<Shift[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date()); 
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedShift, setSelectedShift] = useState<Shift | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"create" | "edit" | "delete">("create");
@@ -28,6 +28,7 @@ const ShiftCalendar = () => {
     adjustedDate.setHours(0, 0, 0, 0);
     setSelectedDate(adjustedDate);
     setSelectedShift(null);
+    fetchShifts();
     console.log(adjustedDate);
   };
 

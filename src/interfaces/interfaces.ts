@@ -12,6 +12,10 @@ export interface UserData {
     address: string;
   }
 
+  export interface Username {
+    username: string;
+  }
+
   export interface Product {
     id?: number;
     name: string;
