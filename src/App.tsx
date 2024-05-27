@@ -14,6 +14,7 @@ import { BasketProvider } from "./context/BasketProvider";
 import { Toaster } from "./components/ui/toaster";
 import BookingDetails from "./pages/booking/BookingDetails";
 import BookingConfirmation from "./pages/booking/BookingConfirmation";
+import UserBookingsPage from "./pages/user/UserBookingsPage";
 
 function App() {
   return (
@@ -36,6 +37,14 @@ function App() {
               element={
                 <RequireAuth roles={["CUSTOMER"]}>
                   <BookingDetails />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/user"
+              element={
+                <RequireAuth roles={["CUSTOMER"]}>
+                  <UserBookingsPage />
                 </RequireAuth>
               }
             />

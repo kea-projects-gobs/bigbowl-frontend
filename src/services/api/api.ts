@@ -68,16 +68,20 @@ export const getAvailableActivities = async (form: AvailableActivity) => {
 // Equipment
 export const getEquipment = async () => {
   return axiosWithAuth.get(API_URL_EQUIPMENT);
-}
+};
 
 export const getEquipmentById = async (id: number) => {
   return axiosWithAuth.get(`${API_URL_EQUIPMENT}/${id}`);
-}
+};
 
 export const orderReplacements = async (equipmentName: string) => {
   return axiosWithAuth.post(`${API_URL_EQUIPMENT}/order`, null, {
     params: {
-      equipmentName: equipmentName
-    }
+      equipmentName: equipmentName,
+    },
   });
-}
+};
+
+export const getAllReservations = async () => {
+  return axiosWithAuth.get(`${API_URL_RESERVATIONS}`);
+};
