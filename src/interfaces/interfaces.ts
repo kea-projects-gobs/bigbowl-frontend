@@ -47,3 +47,11 @@ export interface UserData {
     equipmentCategory: string;
     requiredAmount: number;
   }
+
+  export interface Shift {
+    id?: number;
+    date: string;
+    startTime: string;
+    endTime: string;
+    employee: string;
+  }

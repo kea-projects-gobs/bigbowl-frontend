@@ -2,7 +2,7 @@ import axios from "axios";
 import axiosWithAuth from "../../security/axios";
 import { UserData } from "../../interfaces/interfaces";
 import { API_URL } from "../../settings";
-import { Product, Sale } from "../../interfaces/interfaces";
+import { Product, Sale, Shift } from "../../interfaces/interfaces";
 import { AvailableActivity, Reservation } from "@/interfaces/types";
 
 const API_URL_PRODUCTS = `${API_URL}/products`;
@@ -10,6 +10,7 @@ const API_URL_SALES = `${API_URL}/sales`;
 const API_URL_EQUIPMENT = `${API_URL}/equipment`;
 const API_URL_RESERVATIONS = `${API_URL}/reservations`;
 const API_URL_ACTIVITIES = `${API_URL}/activities`;
+const API_URL_SHIFTS = `${API_URL}/shifts`;
 
 export const createUserWithRole = async (userData: UserData) => {
   try {
@@ -80,4 +81,20 @@ export const orderReplacements = async (equipmentName: string) => {
       equipmentName: equipmentName
     }
   });
+}
+
+export const getShifts = async () => {
+  return axiosWithAuth.get(API_URL_SHIFTS);
+}
+
+export const createShift = async (shift: Shift) => {
+  return axiosWithAuth.post(API_URL_SHIFTS, shift);
+}
+
+export const updateShift = async (id: number, shift: Shift) => {
+  return axiosWithAuth.put(`${API_URL_SHIFTS}/${id}`, shift);
+}
+
+export const deleteShift = async (id: number) => {
+  return axiosWithAuth.delete(`${API_URL_SHIFTS}/${id}`);
 }
