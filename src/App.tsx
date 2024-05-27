@@ -12,6 +12,8 @@ import SalesPage from "./pages/sales/SalesPage";
 import BasketPage from "./pages/sales/BasketPage";
 import { BasketProvider } from "./context/BasketProvider";
 import { Toaster } from "./components/ui/toaster";
+import BookingDetails from "./pages/booking/BookingDetails";
+import BookingConfirmation from "./pages/booking/BookingConfirmation";
 
 function App() {
   return (
@@ -21,6 +23,22 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/booking" element={<BookingPage />} />
+            <Route
+              path="/booking/confirmation"
+              element={
+                <RequireAuth roles={["CUSTOMER"]}>
+                  <BookingConfirmation />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/booking/:id"
+              element={
+                <RequireAuth roles={["CUSTOMER"]}>
+                  <BookingDetails />
+                </RequireAuth>
+              }
+            />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/signup" element={<CreateUserPage />} />
