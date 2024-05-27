@@ -63,7 +63,7 @@ const ShiftCalendar = () => {
   return (
     <div className="flex flex-col md:flex-row">
       <div className="border-2 p-2">
-          <Calendar onDayClick={handleDayClick} />
+          <Calendar onDayClick={handleDayClick} className="flex justify-center items-center" />
 
       </div>
       <div className="md:w-3/4 p-2 border-2">
@@ -71,7 +71,7 @@ const ShiftCalendar = () => {
         <ul className="mt-6">
           {shiftsForSelectedDate.map((shift) => (
             <li key={shift.id} className="flex justify-between items-center bg-white shadow px-4 py-2 rounded-lg mt-2">
-              <span className="font-medium text-gray-800">
+              <span className="font-medium text-gray-800 mx-2">
                 <div>
                   <strong>Tidspunkt:</strong> {formatTime(shift.startTime)} - {formatTime(shift.endTime)}
                 </div>
@@ -79,7 +79,7 @@ const ShiftCalendar = () => {
                   <strong>Medarbejder:</strong> {shift.employee}
                 </div>
               </span>
-              <div>
+              <div className="flex justify-center items-center">
                 <Button onClick={() => openModal("edit", shift)} variant="secondary" className="py-1 px-3 rounded mr-2 hover:bg-gray-200">
                   Rediger
                 </Button>
