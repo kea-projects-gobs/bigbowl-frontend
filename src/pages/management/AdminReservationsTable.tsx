@@ -11,11 +11,13 @@ import { useToast } from "@/components/ui/use-toast";
 import { Item, Order } from "@/interfaces/types";
 import { cn } from "@/lib/utils";
 import {
+  deleteReservation,
   getAllReservations,
   toggleReservationStatus,
 } from "@/services/api/api";
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
+import { DeleteBooking } from "../user/DeleteBooking";
 
 type AdminReservationsTableProps = {
   dateRange: DateRange | undefined;
@@ -100,6 +102,22 @@ export function AdminReservationsTable(props: AdminReservationsTableProps) {
     }
   };
 
+  const handleDeleteReservation = async (id: number) => {
+    await deleteReservation(id);
+    const res = await getAllReservations();
+    if (res.status === 200) {
+      setOrders(res.data);
+      toast({
+        title: "Reservation slettet",
+        description: "Reservationen er blevet slettet.",
+        variant: "default",
+        className: "bg-green-500 text-white",
+      });
+    } else {
+      console.log("Failed to fetch orders:", res.status);
+    }
+  };
+
   return (
     <Table>
       <TableHeader>
@@ -143,6 +161,12 @@ export function AdminReservationsTable(props: AdminReservationsTableProps) {
                 0
               )}
               ,00 kr.
+            </TableCell>
+            <TableCell>
+              <DeleteBooking
+                id={order.id}
+                handleDeleteReservation={handleDeleteReservation}
+              />
             </TableCell>
           </TableRow>
         ))}
