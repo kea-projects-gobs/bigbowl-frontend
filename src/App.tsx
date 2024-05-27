@@ -15,6 +15,7 @@ import { Toaster } from "./components/ui/toaster";
 import BookingDetails from "./pages/booking/BookingDetails";
 import BookingConfirmation from "./pages/booking/BookingConfirmation";
 import UserBookingsPage from "./pages/user/UserBookingsPage";
+import ReservationsManagerPage from "./pages/management/ReservationsManagerPage";
 
 function App() {
   return (
@@ -73,6 +74,14 @@ function App() {
               element={
                 <RequireAuth roles={["EMPLOYEE"]}>
                   <AdminPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/admin/reservations"
+              element={
+                <RequireAuth roles={["EMPLOYEE"]}>
+                  <ReservationsManagerPage />
                 </RequireAuth>
               }
             />

@@ -4,6 +4,7 @@ import { UserData } from "../../interfaces/interfaces";
 import { API_URL } from "../../settings";
 import { Product, Sale } from "../../interfaces/interfaces";
 import { AvailableActivity, Reservation } from "@/interfaces/types";
+import { DateRange } from "react-day-picker";
 
 const API_URL_PRODUCTS = `${API_URL}/products`;
 const API_URL_SALES = `${API_URL}/sales`;
@@ -82,10 +83,22 @@ export const orderReplacements = async (equipmentName: string) => {
   });
 };
 
-export const getAllReservations = async () => {
-  return axiosWithAuth.get(`${API_URL_RESERVATIONS}`);
+export const getAllReservations = async (from?: Date, to?: Date) => {
+  if (from !== undefined && to !== undefined) {
+    return axiosWithAuth.get(
+      `${API_URL_RESERVATIONS}?from=${from
+        .toISOString()
+        .substring(0, 10)}&to=${to.toISOString().substring(0, 10)}`
+    );
+  } else {
+    return axiosWithAuth.get(`${API_URL_RESERVATIONS}`);
+  }
 };
 
 export const deleteReservation = async (id: number) => {
   return axiosWithAuth.delete(`${API_URL_RESERVATIONS}/${id}`);
+};
+
+export const toggleReservationStatus = async (id: number, status: boolean) => {
+  return axiosWithAuth.patch(`${API_URL_RESERVATIONS}/${id}?status=${status}`);
 };
