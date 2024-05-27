@@ -123,9 +123,7 @@ export default function BookingPage() {
     );
     console.log(reservation);
 
-    navigate("/login", {
-      state: { from: location.pathname + "/" + tempReservationId },
-    });
+    navigate("/booking/" + tempReservationId);
   };
 
   return (
