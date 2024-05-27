@@ -2,8 +2,9 @@ import bigbowlicon from "./assets/bigbowlicon.png";
 import { useNavigate, useLocation } from "react-router";
 import { useBasket } from "./context/BasketProvider";
 
-import { PersonIcon, ExitIcon } from "@radix-ui/react-icons";
+import { PersonIcon } from "@radix-ui/react-icons";
 import { useAuth } from "./context/AuthProvider";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -43,7 +44,13 @@ export const Header = () => {
       </div>
       <div className="flex items-center justify-between px-2">
         <div>
-          <img className="max-w-[10rem]" src={bigbowlicon} alt="bigbowlicon" />
+          <Link to="/">
+            <img
+              className="max-w-[10rem]"
+              src={bigbowlicon}
+              alt="bigbowlicon"
+            />
+          </Link>
         </div>
         <div className="relative">
           <svg
