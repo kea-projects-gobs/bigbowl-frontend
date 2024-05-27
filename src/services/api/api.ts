@@ -85,3 +85,7 @@ export const orderReplacements = async (equipmentName: string) => {
 export const getAllReservations = async () => {
   return axiosWithAuth.get(`${API_URL_RESERVATIONS}`);
 };
+
+export const deleteReservation = async (id: number) => {
+  return axiosWithAuth.delete(`${API_URL_RESERVATIONS}/${id}`);
+};

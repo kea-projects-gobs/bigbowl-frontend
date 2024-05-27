@@ -1,6 +1,7 @@
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -10,7 +11,7 @@ import {
 
 import { DeleteBooking } from "./DeleteBooking";
 import { useEffect, useState } from "react";
-import { getAllReservations } from "@/services/api/api";
+import { deleteReservation, getAllReservations } from "@/services/api/api";
 import { cn } from "@/lib/utils";
 
 // JSON ORDERS
@@ -101,8 +102,22 @@ export function BookingsTable() {
     );
   };
 
+  const handleDeleteReservation = async (id: number) => {
+    await deleteReservation(id);
+    const res = await getAllReservations();
+    if (res.status === 200) {
+      setOrders(res.data);
+    } else {
+      console.log("Failed to fetch orders:", res.status);
+    }
+  };
+
   return (
     <Table>
+      <TableCaption>
+        Det er muligt at slette reservationer senest 24 timer før reservations
+        start.
+      </TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">Ordrenr</TableHead>
@@ -136,7 +151,14 @@ export function BookingsTable() {
               ,00 kr.
             </TableCell>
             <TableCell>
-              <DeleteBooking />
+              {new Date(order.reservationItems[0].startTime).getTime() -
+                new Date().getTime() >
+                86400000 && (
+                <DeleteBooking
+                  id={order.id}
+                  handleDeleteReservation={handleDeleteReservation}
+                />
+              )}
             </TableCell>
           </TableRow>
         ))}

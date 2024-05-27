@@ -3,7 +3,6 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -11,7 +10,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { TrashIcon } from "@radix-ui/react-icons";
 
-export function DeleteBooking() {
+type DeleteBookingProps = {
+  handleDeleteReservation: (id: number) => void;
+  id: number;
+};
+
+export function DeleteBooking(props: DeleteBookingProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -30,8 +34,12 @@ export function DeleteBooking() {
           </AlertDialogDescription> */}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Slet booking</AlertDialogAction>
+          <AlertDialogCancel>Fortryd</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={() => props.handleDeleteReservation(props.id)}
+          >
+            Slet booking
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
