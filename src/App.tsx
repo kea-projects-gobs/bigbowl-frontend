@@ -45,7 +45,7 @@ function App() {
             <Route
               path="/sales"
               element={
-                <RequireAuth roles={["EMPLOYEE"]}>
+                <RequireAuth roles={["SALE", "MANAGER"]}>
                   <SalesPage />
                 </RequireAuth>
               }
@@ -53,7 +53,7 @@ function App() {
             <Route
               path="/sales/basket"
               element={
-                <RequireAuth roles={["EMPLOYEE"]}>
+                <RequireAuth roles={["SALE", "MANAGER"]}>
                   <BasketPage />
                 </RequireAuth>
               }
@@ -62,7 +62,7 @@ function App() {
             <Route
               path="/admin"
               element={
-                <RequireAuth roles={["EMPLOYEE"]}>
+                <RequireAuth roles={["MANAGER", "OPERATOR", "SALE"]}>
                   <AdminPage />
                 </RequireAuth>
               }
