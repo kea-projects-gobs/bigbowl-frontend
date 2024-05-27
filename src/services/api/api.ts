@@ -7,6 +7,7 @@ import { AvailableActivity, Reservation } from "@/interfaces/types";
 
 const API_URL_PRODUCTS = `${API_URL}/products`;
 const API_URL_SALES = `${API_URL}/sales`;
+const API_URL_EQUIPMENT = `${API_URL}/equipment`;
 const API_URL_RESERVATIONS = `${API_URL}/reservations`;
 const API_URL_ACTIVITIES = `${API_URL}/activities`;
 
@@ -64,3 +65,19 @@ export const createReservatition = async (reservation: Reservation) => {
 export const getAvailableActivities = async (form: AvailableActivity) => {
   return axios.post(API_URL_ACTIVITIES, form);
 };
+// Equipment
+export const getEquipment = async () => {
+  return axiosWithAuth.get(API_URL_EQUIPMENT);
+}
+
+export const getEquipmentById = async (id: number) => {
+  return axiosWithAuth.get(`${API_URL_EQUIPMENT}/${id}`);
+}
+
+export const orderReplacements = async (equipmentName: string) => {
+  return axiosWithAuth.post(`${API_URL_EQUIPMENT}/order`, null, {
+    params: {
+      equipmentName: equipmentName
+    }
+  });
+}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ProductManager } from "./ProductsManager";
+import { EquipmentManager } from "./EquipmentManager";
 import { useAuth } from "../../context/AuthProvider";
 import { Button } from "@/components/ui/button";
 
@@ -7,14 +8,14 @@ export default function AdminPage() {
   const auth = useAuth();
 
   // Determine the intial tab, based on role
-  const getInitialTab = (): "products" | "test1" | "test2" => {
+  const getInitialTab = (): "products" | "equipment" | "test2" => {
     if (auth?.isLoggedInAs(["EMPLOYEE"])) {
       return "products"; // Default tab for employees
     }
     return "products"; // Fallback default
   };
 
-  const [activeTab, setActiveTab] = useState<"products" | "test1" | "test2">(getInitialTab());
+  const [activeTab, setActiveTab] = useState<"products" | "equipment" | "test2">(getInitialTab());
 
   return (
     <div>
@@ -30,12 +31,12 @@ export default function AdminPage() {
               Produkter
             </Button>
             <Button
-              onClick={() => setActiveTab("test1")}
-              variant={activeTab === "test1" ? "default" : "outline"}
+              onClick={() => setActiveTab("equipment")}
+              variant={activeTab === "equipment" ? "default" : "outline"}
               size="default"
               className="flex-1 rounded-l"
             >
-              Bowling baner
+              Udstyr
             </Button>
             <Button
               onClick={() => setActiveTab("test2")}
@@ -43,13 +44,13 @@ export default function AdminPage() {
               size="default"
               className="flex-1 rounded-l"
             >
-              Udstyr
+              Bowling baner
             </Button>
           </>
         )}
       </div>
       {activeTab === "products" && <ProductManager />}
-      {activeTab === "test1" && <ProductManager />}
+      {activeTab === "equipment" && <EquipmentManager />}
       {activeTab === "test2" && <ProductManager />}
     </div>
   );

@@ -37,3 +37,13 @@ export interface UserData {
     product: Product;
     quantity: number;
   }
+
+  export interface Equipment {
+    id?: number;
+    name: string;
+    description: string;
+    imageUrl: string;
+    stock: number;
+    equipmentCategory: string;
+    requiredAmount: number;
+  }
