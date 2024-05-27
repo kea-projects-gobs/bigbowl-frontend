@@ -22,3 +22,20 @@ export type AvailableActivity = {
   noOfChildren: number;
   startTime: string;
 };
+
+export type Item = {
+  id: number;
+  activityName: string;
+  price: number;
+  startTime: string;
+  endTime: string;
+};
+
+export type Order = {
+  id: number;
+  noOfParticipants: number;
+  date: string;
+  userName: string;
+  reservationItems: Item[];
+  confirmed: boolean;
+};

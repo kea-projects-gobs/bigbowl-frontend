@@ -31,8 +31,15 @@ export const Header = () => {
   const handleProfileClick = () => {
     if (!auth?.username) {
       navigate("/login", { state: { from: location.pathname } });
-    } else {
+      return;
+    }
+    if (auth.isLoggedInAs(["CUSTOMER"])) {
       navigate("/user");
+      return;
+    }
+    if (auth.isLoggedInAs(["EMPLOYEE", "ADMIN"])) {
+      navigate("/admin");
+      return;
     }
   };
 
