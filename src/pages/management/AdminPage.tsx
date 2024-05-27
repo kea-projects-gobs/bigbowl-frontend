@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ProductManager } from "./ProductsManager";
 import { EquipmentManager } from "./EquipmentManager";
+import ShiftCalendar from "../shifts/ShiftCalendar";
 import { useAuth } from "../../context/AuthProvider";
 import { Button } from "@/components/ui/button";
 
@@ -8,14 +9,14 @@ export default function AdminPage() {
   const auth = useAuth();
 
   // Determine the intial tab, based on role
-  const getInitialTab = (): "products" | "equipment" | "test2" => {
+  const getInitialTab = (): "products" | "equipment" | "shifts" => {
     if (auth?.isLoggedInAs(["EMPLOYEE"])) {
       return "products"; // Default tab for employees
     }
     return "products"; // Fallback default
   };
 
-  const [activeTab, setActiveTab] = useState<"products" | "equipment" | "test2">(getInitialTab());
+  const [activeTab, setActiveTab] = useState<"products" | "equipment" | "shifts">(getInitialTab());
 
   return (
     <div>
@@ -39,19 +40,19 @@ export default function AdminPage() {
               Udstyr
             </Button>
             <Button
-              onClick={() => setActiveTab("test2")}
-              variant={activeTab === "test2" ? "default" : "outline"}
+              onClick={() => setActiveTab("shifts")}
+              variant={activeTab === "shifts" ? "default" : "outline"}
               size="default"
               className="flex-1 rounded-l"
             >
-              Bowling baner
+              Vagter
             </Button>
           </>
         )}
       </div>
       {activeTab === "products" && <ProductManager />}
       {activeTab === "equipment" && <EquipmentManager />}
-      {activeTab === "test2" && <ProductManager />}
+      {activeTab === "shifts" && <ShiftCalendar />}
     </div>
   );
 }

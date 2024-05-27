@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 const ShiftCalendar = () => {
   const [shifts, setShifts] = useState<Shift[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date()); 
   const [selectedShift, setSelectedShift] = useState<Shift | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"create" | "edit" | "delete">("create");
@@ -28,6 +28,7 @@ const ShiftCalendar = () => {
     adjustedDate.setHours(0, 0, 0, 0);
     setSelectedDate(adjustedDate);
     setSelectedShift(null);
+    // Måske pas på her, da den fetcher hver gang vi skifter dato på kalenderen (men sikrer at dataen er opdateret)
     fetchShifts();
     console.log(adjustedDate);
   };
@@ -60,12 +61,12 @@ const ShiftCalendar = () => {
   const shiftsForSelectedDate = selectedDate ? shifts.filter((shift) => new Date(shift.date).toDateString() === selectedDate.toDateString()) : [];
 
   return (
-    <div className="flex">
-      <div className="w-1/2">
-        <h1>Vagt administration</h1>
-        <Calendar onDayClick={handleDayClick} />
+    <div className="flex flex-col md:flex-row">
+      <div className="border-2 p-2">
+          <Calendar onDayClick={handleDayClick} />
+
       </div>
-      <div className="w-1/2">
+      <div className="md:w-3/4 p-2 border-2">
         <h2>Vagter for {selectedDate?.toLocaleDateString("da-DK", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h2>
         <ul className="mt-6">
           {shiftsForSelectedDate.map((shift) => (
@@ -89,7 +90,7 @@ const ShiftCalendar = () => {
             </li>
           ))}
         </ul>
-        <Button onClick={() => openModal("create")} className="mt-4 px-4 py-2">
+        <Button onClick={() => openModal("create")} className="mt-4 px-4 py-2 w-full">
           Opret ny vagt
         </Button>
       </div>

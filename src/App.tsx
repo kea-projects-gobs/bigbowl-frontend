@@ -14,7 +14,6 @@ import { BasketProvider } from "./context/BasketProvider";
 import { Toaster } from "./components/ui/toaster";
 import BookingDetails from "./pages/booking/BookingDetails";
 import BookingConfirmation from "./pages/booking/BookingConfirmation";
-import ShiftCalendar from "./pages/shifts/ShiftCalendar";
 
 function App() {
   return (
@@ -43,7 +42,6 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/signup" element={<CreateUserPage />} />
-            <Route path="/shifts" element={<ShiftCalendar />} />
             <Route
               path="/sales"
               element={
