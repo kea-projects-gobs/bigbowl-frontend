@@ -67,7 +67,7 @@ const ShiftCalendar = () => {
 
       </div>
       <div className="md:w-3/4 p-2 border-2">
-        <h2>Vagter for {selectedDate?.toLocaleDateString("da-DK", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h2>
+        <h2 className="font-bold text-lg">Vagter for {selectedDate?.toLocaleDateString("da-DK", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h2>
         <ul className="mt-6">
           {shiftsForSelectedDate.map((shift) => (
             <li key={shift.id} className="flex justify-between items-center bg-white shadow px-4 py-2 rounded-lg mt-2">
