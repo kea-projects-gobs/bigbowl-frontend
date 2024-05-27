@@ -3,7 +3,7 @@ import { ProductManager } from "./ProductsManager";
 import { EquipmentManager } from "./EquipmentManager";
 import { useAuth } from "../../context/AuthProvider";
 import { Button } from "@/components/ui/button";
-import ReservationsManagerPage from "./ReservationsManagerPage";
+import ReservationsManager from "./ReservationsManager";
 
 export default function AdminPage() {
   const auth = useAuth();
@@ -63,7 +63,7 @@ export default function AdminPage() {
       {activeTab === "products" && <ProductManager />}
       {activeTab === "equipment" && <EquipmentManager />}
       {activeTab === "test2" && <ProductManager />}
-      {activeTab === "reservationer" && <ReservationsManagerPage />}
+      {activeTab === "reservationer" && <ReservationsManager />}
     </div>
   );
 }

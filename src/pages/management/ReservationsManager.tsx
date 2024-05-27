@@ -8,7 +8,7 @@ import { DateRange } from "react-day-picker";
 import { addDays } from "date-fns";
 import { AdminReservationsTable } from "./AdminReservationsTable";
 
-function ReservationsManagerPage() {
+function ReservationsManager() {
   const today = new Date();
   const [date, setDate] = useState<DateRange | undefined>({
     from: today,
@@ -47,4 +47,4 @@ function ReservationsManagerPage() {
   );
 }
 
-export default ReservationsManagerPage;
+export default ReservationsManager;
