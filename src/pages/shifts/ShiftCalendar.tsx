@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 const ShiftCalendar = () => {
   const [shifts, setShifts] = useState<Shift[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date()); 
   const [selectedShift, setSelectedShift] = useState<Shift | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"create" | "edit" | "delete">("create");
@@ -23,8 +23,12 @@ const ShiftCalendar = () => {
   };
 
   const handleDayClick = (date: Date) => {
-    setSelectedDate(date);
+    // Set the time to midnight to avoid time zone issues
+    const adjustedDate = new Date(date);
+    adjustedDate.setHours(0, 0, 0, 0);
+    setSelectedDate(adjustedDate);
     setSelectedShift(null);
+    console.log(adjustedDate);
   };
 
   const openModal = (type: "create" | "edit" | "delete", shift?: Shift) => {
@@ -47,55 +51,69 @@ const ShiftCalendar = () => {
     }
   };
 
+  const formatTime = (time: string): string => {
+    const [hours, minutes] = time.split(":");
+    return `${hours}:${minutes}`;
+  };
+
   const shiftsForSelectedDate = selectedDate ? shifts.filter((shift) => new Date(shift.date).toDateString() === selectedDate.toDateString()) : [];
 
   return (
     <div className="flex">
       <div className="w-1/2">
-        <h1>Shift Management</h1>
+        <h1>Vagt administration</h1>
         <Calendar onDayClick={handleDayClick} />
       </div>
       <div className="w-1/2">
-        <h2>Shifts for {selectedDate?.toDateString()}</h2>
-        <Button onClick={() => openModal("create")} className="mt-4 px-4 py-2">
-          Create New Shift
-        </Button>
+        <h2>Vagter for {selectedDate?.toLocaleDateString("da-DK", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h2>
         <ul className="mt-6">
           {shiftsForSelectedDate.map((shift) => (
             <li key={shift.id} className="flex justify-between items-center bg-white shadow px-4 py-2 rounded-lg mt-2">
               <span className="font-medium text-gray-800">
-                {shift.startTime} - {shift.endTime}
-                <p>{shift.employee}</p>
+                <div>
+                  <strong>Tidspunkt:</strong> {formatTime(shift.startTime)} - {formatTime(shift.endTime)}
+                </div>
+                <div>
+                  <strong>Medarbejder:</strong> {shift.employee}
+                </div>
               </span>
               <div>
                 <Button onClick={() => openModal("edit", shift)} variant="secondary" className="py-1 px-3 rounded mr-2 hover:bg-gray-200">
-                  Edit
+                  Rediger
                 </Button>
                 <Button onClick={() => openModal("delete", shift)} variant="secondary" className="py-1 px-3 rounded hover:bg-gray-200">
-                  Delete
+                  Slet
                 </Button>
               </div>
             </li>
           ))}
         </ul>
+        <Button onClick={() => openModal("create")} className="mt-4 px-4 py-2">
+          Opret ny vagt
+        </Button>
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={`${modalType.charAt(0).toUpperCase() + modalType.slice(1)} Shift`}>
         {modalType !== "delete" ? (
           <ShiftForm shift={selectedShift} selectedDate={selectedDate} onSave={handleSave} modalType={modalType} />
         ) : (
           <div>
-            <p className="text-lg mb-4">Are you sure you want to delete this shift?</p>
+            <p className="text-lg mb-4">Er du sikker på, at du vil slette denne vagt?</p>
             <div className="bg-gray-100 p-4 rounded-lg">
-              <h2 className="text-gray-800 font-semibold">
-                <span className="text-blue-600">{selectedShift?.employee}</span>
-              </h2>
+              <span className="text-black">
+                {new Date(selectedShift?.date ?? "").toLocaleDateString("da-DK", { year: "numeric", month: "long", day: "numeric" })}
+              </span>
+
+              <p className="text-gray-800">
+                {formatTime(selectedShift?.startTime ?? "")} - {formatTime(selectedShift?.endTime ?? "")}
+              </p>
+              <p className="text-gray-800">{selectedShift?.employee}</p>
             </div>
             <div className="flex justify-end items-center p-4 mt-4 border-t border-gray-200">
               <Button onClick={handleDelete} variant="destructive" className="py-2 px-4 rounded-l">
-                Yes, delete
+                Ja, slet
               </Button>
               <Button onClick={() => setIsModalOpen(false)} variant="secondary" className="py-2 px-4 rounded-r ml-2 hover:bg-gray-200">
-                No, go back
+                Nej, gå tilbage
               </Button>
             </div>
           </div>
