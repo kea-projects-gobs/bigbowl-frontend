@@ -84,6 +84,9 @@ export const orderReplacements = async (equipmentName: string) => {
 
 export const getAllReservations = async (from?: Date, to?: Date) => {
   if (from !== undefined && to !== undefined) {
+    from.setHours(from.getHours() - from.getTimezoneOffset() / 60);
+    to.setHours(from.getHours() - from.getTimezoneOffset() / 60);
+
     return axiosWithAuth.get(
       `${API_URL_RESERVATIONS}?from=${from
         .toISOString()
