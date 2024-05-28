@@ -1,3 +1,4 @@
+
 export type ReservationItem = {
   activityId: number;
   price: number;
