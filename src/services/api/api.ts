@@ -108,21 +108,29 @@ export const toggleReservationStatus = async (id: number, status: boolean) => {
 
 export const getShifts = async () => {
   return axiosWithAuth.get(API_URL_SHIFTS);
-}
+};
 
 export const createShift = async (shift: Shift) => {
   return axiosWithAuth.post(API_URL_SHIFTS, shift);
-}
+};
 
 export const updateShift = async (id: number, shift: Shift) => {
   return axiosWithAuth.put(`${API_URL_SHIFTS}/${id}`, shift);
-}
+};
 
 export const deleteShift = async (id: number) => {
   return axiosWithAuth.delete(`${API_URL_SHIFTS}/${id}`);
-}
+};
 
 // get users
 export const getUsernames = async () => {
   return axiosWithAuth.get(`${API_URL}/user-with-role`);
-}
+};
+
+export const getAllActivities = async () => {
+  return axiosWithAuth.get(`${API_URL_ACTIVITIES}`);
+};
+
+export const toggleActivityStatus = async (id: number, status: boolean) => {
+  return axiosWithAuth.patch(`${API_URL_ACTIVITIES}/${id}?status=${status}`);
+};

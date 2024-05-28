@@ -5,11 +5,12 @@ import ShiftCalendar from "../shifts/ShiftCalendar";
 import { useAuth } from "../../context/AuthProvider";
 import { Button } from "@/components/ui/button";
 import ReservationsManager from "./ReservationsManager";
+import ActivityManager from "./ActivityManager";
 
 export default function AdminPage() {
   const auth = useAuth();
 
-  type Tabs = "products" | "equipment" | "shifts" | "reservationer";
+  type Tabs = "products" | "equipment" | "shifts" | "reservations" | "activity";
 
   // Determine the initial tab, based on role
   const getInitialTab = (): Tabs => {
@@ -30,21 +31,29 @@ export default function AdminPage() {
       <div className="flex flex-wrap justify-center gap-4 m-auto mt-2 mb-4 sm:flex-nowrap">
         {auth?.isLoggedInAs(["MANAGER", "SALE"]) && (
           <>
-          <Button
-            onClick={() => setActiveTab("products")}
-            variant={activeTab === "products" ? "default" : "outline"}
-            size="default"
-            className="flex-1 rounded-l"
-          >
-            Produkter
-          </Button>
             <Button
-              onClick={() => setActiveTab("reservationer")}
-              variant={activeTab === "reservationer" ? "default" : "outline"}
+              onClick={() => setActiveTab("products")}
+              variant={activeTab === "products" ? "default" : "outline"}
+              size="default"
+              className="flex-1 rounded-l"
+            >
+              Produkter
+            </Button>
+            <Button
+              onClick={() => setActiveTab("reservations")}
+              variant={activeTab === "reservations" ? "default" : "outline"}
               size="default"
               className="flex-1 rounded-l"
             >
               Reservationer
+            </Button>
+            <Button
+              onClick={() => setActiveTab("activity")}
+              variant={activeTab === "activity" ? "default" : "outline"}
+              size="default"
+              className="flex-1 rounded-l"
+            >
+              Aktiviteter
             </Button>
           </>
         )}
@@ -59,22 +68,23 @@ export default function AdminPage() {
           </Button>
         )}
         {auth?.isLoggedInAs(["MANAGER"]) && (
-        <>
-          <Button
-            onClick={() => setActiveTab("shifts")}
-            variant={activeTab === "shifts" ? "default" : "outline"}
-            size="default"
-            className="flex-1 rounded-l"
-          >
-            Vagter
-          </Button>
+          <>
+            <Button
+              onClick={() => setActiveTab("shifts")}
+              variant={activeTab === "shifts" ? "default" : "outline"}
+              size="default"
+              className="flex-1 rounded-l"
+            >
+              Vagter
+            </Button>
           </>
-          )}
+        )}
       </div>
       {activeTab === "products" && <ProductManager />}
       {activeTab === "equipment" && <EquipmentManager />}
+      {activeTab === "reservations" && <ReservationsManager />}
+      {activeTab === "activity" && <ActivityManager />}
       {activeTab === "shifts" && <ShiftCalendar />}
-      {activeTab === "reservationer" && <ReservationsManager />}
     </div>
   );
 }
