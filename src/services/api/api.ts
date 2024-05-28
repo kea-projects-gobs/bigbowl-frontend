@@ -104,3 +104,11 @@ export const deleteReservation = async (id: number) => {
 export const toggleReservationStatus = async (id: number, status: boolean) => {
   return axiosWithAuth.patch(`${API_URL_RESERVATIONS}/${id}?status=${status}`);
 };
+
+export const getAllActivities = async () => {
+  return axiosWithAuth.get(`${API_URL_ACTIVITIES}`);
+};
+
+export const toggleActivityStatus = async (id: number, status: boolean) => {
+  return axiosWithAuth.patch(`${API_URL_ACTIVITIES}/${id}?status=${status}`);
+};

@@ -4,11 +4,12 @@ import { EquipmentManager } from "./EquipmentManager";
 import { useAuth } from "../../context/AuthProvider";
 import { Button } from "@/components/ui/button";
 import ReservationsManager from "./ReservationsManager";
+import ActivityManager from "./ActivityManager";
 
 export default function AdminPage() {
   const auth = useAuth();
 
-  type Tabs = "products" | "equipment" | "test2" | "reservationer";
+  type Tabs = "products" | "equipment" | "test2" | "reservations" | "activity";
 
   // Determine the intial tab, based on role
   const getInitialTab = (): Tabs => {
@@ -50,12 +51,20 @@ export default function AdminPage() {
               Bowling baner
             </Button>
             <Button
-              onClick={() => setActiveTab("reservationer")}
-              variant={activeTab === "reservationer" ? "default" : "outline"}
+              onClick={() => setActiveTab("reservations")}
+              variant={activeTab === "reservations" ? "default" : "outline"}
               size="default"
               className="flex-1 rounded-l"
             >
               Reservationer
+            </Button>
+            <Button
+              onClick={() => setActiveTab("activity")}
+              variant={activeTab === "activity" ? "default" : "outline"}
+              size="default"
+              className="flex-1 rounded-l"
+            >
+              Aktiviteter
             </Button>
           </>
         )}
@@ -63,7 +72,8 @@ export default function AdminPage() {
       {activeTab === "products" && <ProductManager />}
       {activeTab === "equipment" && <EquipmentManager />}
       {activeTab === "test2" && <ProductManager />}
-      {activeTab === "reservationer" && <ReservationsManager />}
+      {activeTab === "reservations" && <ReservationsManager />}
+      {activeTab === "activity" && <ActivityManager />}
     </div>
   );
 }

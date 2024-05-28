@@ -39,3 +39,16 @@ export type Order = {
   reservationItems: Item[];
   confirmed: boolean;
 };
+
+export type Activity = {
+  id: number;
+  activityType: string;
+  name: string;
+  location: string;
+  description: string;
+  active: boolean;
+  imageUrl: string;
+  maxParticipants: number;
+  childFriendly: boolean;
+  price: number;
+};
