@@ -37,7 +37,7 @@ export const Header = () => {
       navigate("/user");
       return;
     }
-    if (auth.isLoggedInAs(["EMPLOYEE", "ADMIN"])) {
+    if (auth.isLoggedInAs(["SALE", "MANAGER", "OPERATOR"])) {
       navigate("/admin");
       return;
     }

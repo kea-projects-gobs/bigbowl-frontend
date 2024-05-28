@@ -17,8 +17,6 @@ export default function AdminPage() {
       return "products"; // Default tab for SALE
     } else if (auth?.isLoggedInAs(["OPERATOR"])) {
       return "equipment"; // Default tab for OPERATOR
-    } else if (auth?.isLoggedInAs(["EMPLOYEE"])) {
-      return "products"; // Default tab for EMPLOYEE
     } else if (auth?.isLoggedInAs(["MANAGER"])) {
       return "shifts"; // Default tab for MANAGER
     }
@@ -31,6 +29,7 @@ export default function AdminPage() {
     <div>
       <div className="flex flex-wrap justify-center gap-4 m-auto mt-2 mb-4 sm:flex-nowrap">
         {auth?.isLoggedInAs(["MANAGER", "SALE"]) && (
+          <>
           <Button
             onClick={() => setActiveTab("products")}
             variant={activeTab === "products" ? "default" : "outline"}
@@ -39,6 +38,15 @@ export default function AdminPage() {
           >
             Produkter
           </Button>
+            <Button
+              onClick={() => setActiveTab("reservationer")}
+              variant={activeTab === "reservationer" ? "default" : "outline"}
+              size="default"
+              className="flex-1 rounded-l"
+            >
+              Reservationer
+            </Button>
+          </>
         )}
         {auth?.isLoggedInAs(["MANAGER", "OPERATOR"]) && (
           <Button
@@ -60,14 +68,6 @@ export default function AdminPage() {
           >
             Vagter
           </Button>
-            <Button
-              onClick={() => setActiveTab("reservationer")}
-              variant={activeTab === "reservationer" ? "default" : "outline"}
-              size="default"
-              className="flex-1 rounded-l"
-            >
-              Reservationer
-            </Button>
           </>
           )}
       </div>
