@@ -4,6 +4,7 @@ import Modal from "../../components/Modal";
 import InputField from "../../components/InputField";
 import { Product, Category } from "../../interfaces/interfaces";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 export function ProductManager() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -14,6 +15,7 @@ export function ProductManager() {
   const [modalType, setModalType] = useState<"create" | "edit" | "delete">(
     "create"
   );
+  const {toast} = useToast();
 
   useEffect(() => {
     fetchProducts();
@@ -45,6 +47,11 @@ export function ProductManager() {
     }
     await fetchProducts();
     setIsModalOpen(false);
+    toast({
+      title: modalType === "create" ? "Produkt oprettet" : "Produkt opdateret",
+      description: modalType === "create" ? "Produktet er nu oprettet" : "Produktet er nu opdateret",
+      variant: "default",
+    });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,6 +93,11 @@ export function ProductManager() {
       await deleteProducts(selectedProduct.id);
       fetchProducts();
       setIsModalOpen(false);
+      toast({
+        title: "Produkt slettet",
+        description: `${selectedProduct.name} er nu slettet`,
+        variant: "destructive",
+      });
     }
   };
 

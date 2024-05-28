@@ -5,6 +5,7 @@ import ShiftForm from "./ShiftForm";
 import Modal from "@/components/Modal";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 const ShiftCalendar = () => {
   const [shifts, setShifts] = useState<Shift[]>([]);
@@ -12,6 +13,7 @@ const ShiftCalendar = () => {
   const [selectedShift, setSelectedShift] = useState<Shift | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"create" | "edit" | "delete">("create");
+  const {toast} = useToast();
 
   useEffect(() => {
     fetchShifts();
@@ -43,6 +45,11 @@ const ShiftCalendar = () => {
     await fetchShifts();
     setSelectedShift(null);
     setIsModalOpen(false);
+    toast({
+      title: modalType === "create" ? "Vagt oprettet" : "Vagt opdateret",
+      description: modalType === "create" ? "Vagten er nu oprettet" : "Vagten er nu opdateret",
+      variant: "default",
+    });
   };
 
   const handleDelete = async () => {
@@ -50,6 +57,11 @@ const ShiftCalendar = () => {
       await deleteShift(selectedShift.id);
       fetchShifts();
       setIsModalOpen(false);
+      toast({
+        title: "Vagt slettet",
+        description: `Vagt er slettet for ${selectedShift.employee}: ${formatTime(selectedShift.startTime)} - ${formatTime(selectedShift.endTime)}`,
+        variant: "destructive",
+      });
     }
   };
 
