@@ -5,9 +5,15 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-import { authProvider, LoginRequest, LoginResponse, User } from "../security/authUtils";
+import {
+  authProvider,
+  LoginRequest,
+  LoginResponse,
+  User,
+} from "../security/authUtils";
 import { jwtDecode } from "jwt-decode";
 import getToken from "../security/authToken";
+import { useToast } from "@/components/ui/use-toast";
 
 interface AuthContextType {
   username: string | null;
@@ -30,6 +36,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   //We use this to distinguish between being logged in or not
   const initialUsername = localStorage.getItem("username") || null;
   const [username, setUsername] = useState<string | null>(initialUsername);
+  const { toast } = useToast();
 
   const signIn = async (user_: LoginRequest) => {
     return authProvider.signIn(user_).then(user => {
@@ -49,6 +56,12 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         // schedules the signout function to be called after the timeout
         signOut();
       }, timeout); // Timeout is set as the delay
+      toast({
+        title: "Logget ind",
+        description: "Du er nu logget ind som " + user.username + ".",
+        variant: "default",
+        className: "bg-green-500 text-white",
+      });
 
       return user;
     });
@@ -65,8 +78,15 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("roles");
 
     // Clear basket items
-    localStorage.removeItem('salesBasket');
-    localStorage.removeItem('bookingBasket');
+    localStorage.removeItem("salesBasket");
+    localStorage.removeItem("bookingBasket");
+
+    toast({
+      title: "Logget ud",
+      description: "Du er nu logget ud.",
+      variant: "default",
+      className: "bg-green-500 text-white",
+    });
   };
 
   // If certain actions require a user to have multiple specific roles - we might need to change/adjust this logic

@@ -2,11 +2,23 @@ import bigbowlicon from "./assets/bigbowlicon.png";
 import { useNavigate, useLocation } from "react-router";
 import { useBasket } from "./context/BasketProvider";
 
+import { ExitIcon, PersonIcon } from "@radix-ui/react-icons";
+import { useAuth } from "./context/AuthProvider";
+import { Link } from "react-router-dom";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 export const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { basketCount } = useBasket();
 
+  const auth = useAuth();
 
   const handleBasketClick = () => {
     if (location.pathname.startsWith("/sales")) {
@@ -16,11 +28,60 @@ export const Header = () => {
     }
   };
 
+  const handleProfileClick = () => {
+    if (!auth?.username) {
+      navigate("/login", { state: { from: location.pathname } });
+      return;
+    }
+    if (auth.isLoggedInAs(["CUSTOMER"])) {
+      navigate("/user");
+      return;
+    }
+    if (auth.isLoggedInAs(["EMPLOYEE", "ADMIN"])) {
+      navigate("/admin");
+      return;
+    }
+  };
+
+  const handleLogout = () => {
+    auth?.signOut();
+    navigate("/");
+  };
+
   return (
-    <header className="border-b-[1px] border-border border-solid w-full pb-4">
+    <header className="border-b-[1px] border-border border-solid w-full pb-4 ">
+      <div className="flex items-center justify-end gap-4 px-2 py-2">
+        <button
+          className="flex gap-1 hover:opacity-50"
+          onClick={handleProfileClick}
+        >
+          <PersonIcon className="w-4 h-4 cursor-pointer" />
+          <p className="text-[12px] ">{auth?.username}</p>
+        </button>
+        {auth?.isLoggedIn() && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button onClick={handleLogout}>
+                  <ExitIcon className="w-4 h-4 cursor-pointer hover:opacity-50" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Log ud</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </div>
       <div className="flex items-center justify-between px-2">
         <div>
-          <img className="max-w-[10rem]" src={bigbowlicon} alt="bigbowlicon" />
+          <Link to="/">
+            <img
+              className="max-w-[10rem]"
+              src={bigbowlicon}
+              alt="bigbowlicon"
+            />
+          </Link>
         </div>
         <div className="relative">
           <svg
@@ -40,5 +101,4 @@ export const Header = () => {
       </div>
     </header>
   );
-}
-
+};

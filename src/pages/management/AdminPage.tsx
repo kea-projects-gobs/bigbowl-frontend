@@ -4,12 +4,15 @@ import { EquipmentManager } from "./EquipmentManager";
 import ShiftCalendar from "../shifts/ShiftCalendar";
 import { useAuth } from "../../context/AuthProvider";
 import { Button } from "@/components/ui/button";
+import ReservationsManager from "./ReservationsManager";
 
 export default function AdminPage() {
   const auth = useAuth();
 
+  type Tabs = "products" | "equipment" | "shifts" | "reservationer";
+
   // Determine the initial tab, based on role
-  const getInitialTab = (): "products" | "equipment" | "shifts" => {
+  const getInitialTab = (): Tabs => {
     if (auth?.isLoggedInAs(["SALE"])) {
       return "products"; // Default tab for SALE
     } else if (auth?.isLoggedInAs(["OPERATOR"])) {
@@ -22,11 +25,11 @@ export default function AdminPage() {
     return "shifts"; // Fallback default
   };
 
-  const [activeTab, setActiveTab] = useState<"products" | "equipment" | "shifts">(getInitialTab());
+  const [activeTab, setActiveTab] = useState<Tabs>(getInitialTab());
 
   return (
     <div>
-      <div className="mb-4 mt-2 flex flex-wrap gap-4 m-auto justify-center sm:flex-nowrap">
+      <div className="flex flex-wrap justify-center gap-4 m-auto mt-2 mb-4 sm:flex-nowrap">
         {auth?.isLoggedInAs(["MANAGER", "SALE"]) && (
           <Button
             onClick={() => setActiveTab("products")}
@@ -48,6 +51,7 @@ export default function AdminPage() {
           </Button>
         )}
         {auth?.isLoggedInAs(["MANAGER"]) && (
+        <>
           <Button
             onClick={() => setActiveTab("shifts")}
             variant={activeTab === "shifts" ? "default" : "outline"}
@@ -56,11 +60,21 @@ export default function AdminPage() {
           >
             Vagter
           </Button>
-        )}
+            <Button
+              onClick={() => setActiveTab("reservationer")}
+              variant={activeTab === "reservationer" ? "default" : "outline"}
+              size="default"
+              className="flex-1 rounded-l"
+            >
+              Reservationer
+            </Button>
+          </>
+          )}
       </div>
       {activeTab === "products" && <ProductManager />}
       {activeTab === "equipment" && <EquipmentManager />}
       {activeTab === "shifts" && <ShiftCalendar />}
+      {activeTab === "reservationer" && <ReservationsManager />}
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import { UserData } from "./interfaces";
 
 export type ReservationItem = {
   activityId: number;
@@ -25,4 +24,19 @@ export type AvailableActivity = {
   startTime: string;
 };
 
-export type Username = Pick<UserData, "username">;
+export type Item = {
+  id: number;
+  activityName: string;
+  price: number;
+  startTime: string;
+  endTime: string;
+};
+
+export type Order = {
+  id: number;
+  noOfParticipants: number;
+  date: string;
+  userName: string;
+  reservationItems: Item[];
+  confirmed: boolean;
+};

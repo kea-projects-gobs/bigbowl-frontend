@@ -69,19 +69,42 @@ export const getAvailableActivities = async (form: AvailableActivity) => {
 // Equipment
 export const getEquipment = async () => {
   return axiosWithAuth.get(API_URL_EQUIPMENT);
-}
+};
 
 export const getEquipmentById = async (id: number) => {
   return axiosWithAuth.get(`${API_URL_EQUIPMENT}/${id}`);
-}
+};
 
 export const orderReplacements = async (equipmentName: string) => {
   return axiosWithAuth.post(`${API_URL_EQUIPMENT}/order`, null, {
     params: {
-      equipmentName: equipmentName
-    }
+      equipmentName: equipmentName,
+    },
   });
-}
+};
+
+export const getAllReservations = async (from?: Date, to?: Date) => {
+  if (from !== undefined && to !== undefined) {
+    from.setHours(from.getHours() - from.getTimezoneOffset() / 60);
+    to.setHours(from.getHours() - from.getTimezoneOffset() / 60);
+
+    return axiosWithAuth.get(
+      `${API_URL_RESERVATIONS}?from=${from
+        .toISOString()
+        .substring(0, 10)}&to=${to.toISOString().substring(0, 10)}`
+    );
+  } else {
+    return axiosWithAuth.get(`${API_URL_RESERVATIONS}`);
+  }
+};
+
+export const deleteReservation = async (id: number) => {
+  return axiosWithAuth.delete(`${API_URL_RESERVATIONS}/${id}`);
+};
+
+export const toggleReservationStatus = async (id: number, status: boolean) => {
+  return axiosWithAuth.patch(`${API_URL_RESERVATIONS}/${id}?status=${status}`);
+};
 
 export const getShifts = async () => {
   return axiosWithAuth.get(API_URL_SHIFTS);
